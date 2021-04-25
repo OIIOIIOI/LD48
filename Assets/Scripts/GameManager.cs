@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
     public int actionPopulationRatio = 5; 
     // Number of actions available
     private int _actionAvailable = 1;
-
+    
     // Static instance of GM
     public static GameManager GameInstance;
 

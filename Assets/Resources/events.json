@@ -1,0 +1,21 @@
+{
+	"scriptedEvents":[
+		{
+			"type": "Meet",
+			"text": "We found survivors carrying a mysterious object! We brought them back with us and they gave us the Relic.",
+			"rewardTypes": [ "People", "Relic" ]
+		}
+	],
+	"randomEvents":[
+		{
+			"type": "Meet",
+			"text": "We found survivors and brought them back with us along with some valuables.",
+			"rewardTypes": [ "People", "Relic" ]
+		},
+		{
+			"type": "Loot",
+			"text": "We salvaged some scraps from the ruins of an ancient island nearby.",
+			"rewardTypes": [ "Scraps" ]
+		}
+	]
+}
