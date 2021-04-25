@@ -26,4 +26,19 @@ public class Tooltip : MonoBehaviour
         // Display tooltip
         TooltipsManager.TooltipsManagerInstance.SetAndShowTooltip(message);
     }
+    // TEST
+    public void OnMouseEnterUI(string inputMessage)
+    {
+        message = inputMessage;
+        // Display tooltip
+        StartCoroutine(nameof(TooltipsCoroutine));
+    }
+    public void OnMouseExitUI()
+    {
+        StopCoroutine(nameof(TooltipsCoroutine));
+        TooltipsManager.TooltipsManagerInstance.HideTooltip();
+    }
+    
+    
+    
 }

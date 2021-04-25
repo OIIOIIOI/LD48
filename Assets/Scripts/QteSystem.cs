@@ -68,11 +68,10 @@ public class QteSystem : MonoBehaviour
         
         if (_timer > neutralTime)
         {
-            Destroy(largeCircle);
-            Destroy(largeCircleMask);
             if (_timer > timeToSuccess+neutralTime)
             {
                 _callback(false);
+                Destroy(gameObject);
             }
             else
             {
@@ -81,9 +80,11 @@ public class QteSystem : MonoBehaviour
                     if (Input.GetKeyDown(keys[_currentKey]))
                     {
                         _callback(true);
+                        Destroy(gameObject);
                     }
                 }
             }
+            
         }
         else
         {
