@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Icon : MonoBehaviour
+public class IconInGame : MonoBehaviour
 {
 
     public enum IconType {        
@@ -17,6 +17,7 @@ public class Icon : MonoBehaviour
         Build,
         Repair,
         Expedition,
+        Collect,
         Upgrade
     } 
     
@@ -58,8 +59,11 @@ public class Icon : MonoBehaviour
             case IconType.Expedition:
                 _sr.sprite = sprites[7];
                 break;
-            case IconType.Upgrade:
+            case IconType.Collect:
                 _sr.sprite = sprites[8];
+                break;
+            case IconType.Upgrade:
+                _sr.sprite = sprites[9];
                 break;
             default :
                 _sr.sprite = sprites[0];
