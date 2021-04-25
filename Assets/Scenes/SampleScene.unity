@@ -4385,8 +4385,8 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: 'Population: determine number of actions you may perform
-              during each phase. If population decrease under 2, you loose the game.'
+            m_StringArgument: Population help you to increase  actions number . If
+              population decrease under 2, you loose the game.
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 1
@@ -5329,7 +5329,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0.6}
   m_AnchoredPosition: {x: 7.847534, y: 7.847534}
-  m_SizeDelta: {x: 216, y: -16}
+  m_SizeDelta: {x: 308.6509, y: -439.5463}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1785106533
 MonoBehaviour:
@@ -6024,7 +6024,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 59.2
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
