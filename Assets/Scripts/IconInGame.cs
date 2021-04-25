@@ -65,6 +65,9 @@ public class IconInGame : MonoBehaviour
             case IconType.Upgrade:
                 _sr.sprite = sprites[9];
                 break;
+            case IconType.ActionsPoint:
+                _sr.sprite = sprites[10];
+                break;
             default :
                 _sr.sprite = sprites[0];
                 break;

@@ -66,6 +66,9 @@ public class IconUI : MonoBehaviour
             case IconType.Upgrade:
                 _img.sprite = sprites[9];
                 break;
+            case IconType.ActionsPoint:
+                _img.sprite = sprites[10];
+                break;
             default :
                 _img.sprite = sprites[0];
                 break;
