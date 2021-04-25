@@ -7,26 +7,62 @@ using UnityEngine;
 public class Icon : MonoBehaviour
 {
 
-    public enum IconType { Relic, People, Material } 
+    public enum IconType {        
+        Population,
+        Materials,
+        Knowledge,
+        Relic,
+        ActionsPoint,
+        Analyse,
+        Build,
+        Repair,
+        Expedition,
+        Upgrade
+    } 
     
     public Sprite[] sprites;
-    public IconType type;
-    private SpriteRenderer sr;
+    public IconType iconType;
+    private SpriteRenderer _sr;
 
     private void Awake()
     {
-        sr = GetComponent<SpriteRenderer>();
+        _sr = GetComponent<SpriteRenderer>();
+        SetType(iconType);
     }
 
     public void SetType(IconType type)
     {
         switch (type)
         {
-            case IconType.People:
-                sr.sprite = sprites[0];
+            case IconType.Population:
+                _sr.sprite = sprites[0];
+                break;
+            case IconType.Materials:
+                _sr.sprite = sprites[1];
+                break;
+            case IconType.Knowledge:
+                _sr.sprite = sprites[2];
+                break;
+            case IconType.Relic:
+                _sr.sprite = sprites[3];
+                break;
+            case IconType.Analyse:
+                _sr.sprite = sprites[4];
+                break;
+            case IconType.Build:
+                _sr.sprite = sprites[5];
+                break;
+            case IconType.Repair:
+                _sr.sprite = sprites[6];
+                break;
+            case IconType.Expedition:
+                _sr.sprite = sprites[7];
+                break;
+            case IconType.Upgrade:
+                _sr.sprite = sprites[8];
                 break;
             default :
-                sr.sprite = sprites[1];
+                _sr.sprite = sprites[0];
                 break;
         }
     }

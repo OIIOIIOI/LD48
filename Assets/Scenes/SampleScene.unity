@@ -142,7 +142,7 @@ GameObject:
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &37972935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -714,7 +714,7 @@ SpriteRenderer:
   m_Size: {x: 10.71, y: 5.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &282177860
@@ -2438,7 +2438,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1142576995
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4393,9 +4393,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  type: 0
+  - {fileID: 21300000, guid: 4f5c50bc1f50cf444a61fad86707e463, type: 3}
+  - {fileID: 21300000, guid: edcb1f93d6f01e547bfa2746c30dab96, type: 3}
+  - {fileID: 21300000, guid: cb9eaf32f2b62e946abb5c34816a1961, type: 3}
+  - {fileID: 21300000, guid: 10db66b70d7b38a44bd06cadef274a7d, type: 3}
+  - {fileID: 21300000, guid: e5f490bed5f14b746bcde9038f683ad6, type: 3}
+  - {fileID: 21300000, guid: 1910d7d617abe0340ae90fe5c9422d5e, type: 3}
+  - {fileID: 21300000, guid: 0295d6a99497fd64a91d2d1a0ba3f0ec, type: 3}
+  - {fileID: 21300000, guid: d0fe70702f0fe6c448cafa06c5332c04, type: 3}
+  - {fileID: 21300000, guid: fe1bea0ab12374e40bf697ac29a35109, type: 3}
+  iconType: 0
 --- !u!4 &1982884748
 Transform:
   m_ObjectHideFlags: 0
