@@ -56,3 +56,6 @@ TagManager:
   - name: Front
     uniqueID: 2565854489
     locked: 0
+  - name: Icons
+    uniqueID: 1052459267
+    locked: 0
