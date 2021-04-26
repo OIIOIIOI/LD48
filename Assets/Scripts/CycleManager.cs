@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using QTEType = QTEManager.QTEType;
 
 public class CycleManager : MonoBehaviour
 {
@@ -36,17 +37,40 @@ public class CycleManager : MonoBehaviour
     {
         StartPhase(ActionPhase.Fall);
     }
+    
+    // GENERAL PHASE STUFF
 
     private void StartPhase(ActionPhase p)
     {
+        Debug.Log("START PHASE " + p.ToString());
+
         phase = p;
         state = (phase == ActionPhase.Fall) ? LoopState.Fall : LoopState.Stasis;
         
         TimeManager.instance.StartPhase(phase);
+        
+        // Start the current phase
+        switch (phase)
+        {
+            case ActionPhase.Fall:
+                StartPhaseFall();
+                break;
+        }
     }
 
     public void EndPhase()
     {
+        Debug.Log("END PHASE " + phase.ToString());
+        
+        // End the current phase
+        switch (phase)
+        {
+            case ActionPhase.Fall:
+                EndPhaseFall();
+                break;
+        }
+        
+        // Handle cycle increment and start next phase
         if (phase == ActionPhase.Stasis)
             currentCycle++;
 
@@ -71,6 +95,25 @@ public class CycleManager : MonoBehaviour
         else
             Debug.Log("GAME OVER");
     }
+
+    // SPECIFIC PHASE BEHAVIOURS
+    
+    private void StartPhaseFall()
+    {
+        if (true)
+            QTEManager.instance.Activate(QTEType.Debris, 4f);
+        if (false)
+            QTEManager.instance.Activate(QTEType.Expedition, 1.5f);
+        if (false)
+            QTEManager.instance.Activate(QTEType.Research, 2.5f);
+    }
+    
+    private void EndPhaseFall()
+    {
+        QTEManager.instance.DeactivateAll();
+    }
+    
+    // UPDATES
 
     private void Update()
     {
