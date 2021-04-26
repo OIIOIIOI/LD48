@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BuildingType = BuildingManager.BuildingType;
 
 public class Placeholder : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    // Whether or not a building is in this placeholder
+    public bool isHosting;
 
-    // Update is called once per frame
-    void Update()
+    // Type of building
+    public BuildingType buildingType;
+
+    //  Transform position of the placeholder
+    public Vector3 placeholderPosition;
+
+    private void Awake()
     {
-        
+        placeholderPosition = transform.position;
     }
 }
+

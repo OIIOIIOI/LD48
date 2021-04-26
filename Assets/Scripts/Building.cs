@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using BuildingType = BuildingManager.BuildingType;
 
 public class Building : MonoBehaviour
 {
     public int maxHealthPoints;
     public int currentHealthPoints;
-    public BuildingManager.BuildingType buildingType;
+    public BuildingType buildingType;
     // Whether or not building is selected for fall phase
     public bool isSelected = false;
     // Icon displayed when action is performed (fall step)
@@ -64,13 +65,13 @@ public class Building : MonoBehaviour
         {   // TODO implement function
             switch (buildingType)
             {
-                case BuildingManager.BuildingType.Laboratory:
+                case BuildingType.Laboratory:
                     print("execute Analyze relic function");
                     break;
-                case BuildingManager.BuildingType.ExpeditionCenter:
+                case BuildingType.ExpeditionCenter:
                     print("execute Prepare expedition function");
                     break;
-                case BuildingManager.BuildingType.HarpoonStation:
+                case BuildingType.HarpoonStation:
                     print("execute harpoon function");
                     break;
                 default:

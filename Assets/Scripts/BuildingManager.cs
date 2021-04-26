@@ -16,6 +16,15 @@ public class BuildingManager : MonoBehaviour
         House1,
         House2
     }
+
+    public enum PlaceholderType
+    {
+        Left,
+        Right,
+        Bottom,
+        BottomLeft,
+        BottomRight
+    }
     
     // Building gameObjectScript
     public Building laboratory;
@@ -25,17 +34,18 @@ public class BuildingManager : MonoBehaviour
     public Building house2;
     
     // PlaceHolder gameObject
-    public GameObject left;
-    public GameObject right;
-    public GameObject bottom;
-    public GameObject bottomLeft;
-    public GameObject bottomRight;
+    public Placeholder leftPlace;
+    public Placeholder rightPlace;
+    public Placeholder bottomPlace;
+    public Placeholder bottomLeftPlace;
+    public Placeholder bottomRightPlace;
 
     // List of built facilities
     public List<Building> inGameBuildingScripts = new List<Building>();
     
     // Targeted building for damage (us Type)
-    public Building targetedBuilding;
+    private Building targetedBuilding;
+    private Placeholder targetedPlaceholder;
     private void Awake()
     {
         if (BuildingManagerInstance == null)
@@ -62,8 +72,18 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
+    // Check if a building is present in placeholder
+    public bool EvaluateImpact(PlaceholderType placeholder)
+    {
+        GetTargetedPlaceholder(placeholder);
+        if (!targetedPlaceholder.isHosting)
+            return false;
+        DealDamage(targetedPlaceholder.buildingType);
+        return true;
+    }
+    
     // damage building
-    public void DealDamage(BuildingType type) {
+    private void DealDamage(BuildingType type) {
         GetTargetedBuildingObj(type);
         var damage = GameManager.GameInstance.damageHitValue;
         targetedBuilding.ReceiveDamage(damage);
@@ -71,6 +91,8 @@ public class BuildingManager : MonoBehaviour
     
     /* Stase actions functions */
     // Build
+    // placeholder.hosting = true
+    // placeholder.buildingtype
     
     // repair
     
@@ -101,5 +123,29 @@ public class BuildingManager : MonoBehaviour
                 targetedBuilding = null;
                 break;
         }
+    }
+    // Get Placeholder game object
+    private void GetTargetedPlaceholder(PlaceholderType type) {
+        switch (type)
+        {
+            case PlaceholderType.Left:
+                targetedPlaceholder = leftPlace;
+                break;
+            case PlaceholderType.Right:
+                targetedPlaceholder = rightPlace;
+                break;
+            case PlaceholderType.Bottom:
+                targetedPlaceholder = bottomPlace;
+                break;
+            case PlaceholderType.BottomLeft:
+                targetedPlaceholder = bottomLeftPlace;
+                break;
+            case PlaceholderType.BottomRight:
+                targetedPlaceholder = bottomRightPlace;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+
     }
 }
