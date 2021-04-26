@@ -32,7 +32,7 @@ public class GameCamera : MonoBehaviour
     private float startShakeAmount;
     private float endShakeAmount;
     
-    private LoopState state = LoopState.Pause;
+    private LoopState state = LoopState.Fall;
     private float transitionDuration;
     private float elapsedTime;
     private float cycleModifier;
@@ -67,13 +67,6 @@ public class GameCamera : MonoBehaviour
                 endPosition = stasisPosition;
                 endRotation = Quaternion.Euler(stasisRotation);
                 endShakeAmount = 0f;
-                break;
-            default:
-                startPosition = transform.position;
-                startRotation = transform.rotation;
-                startShakeAmount = endShakeAmount = 0f;
-                endPosition = new Vector3(0f, 0f, -10f);
-                endRotation = Quaternion.identity;
                 break;
         }
     }
