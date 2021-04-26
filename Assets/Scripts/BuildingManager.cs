@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
+using ActionPhase = CycleManager.ActionPhase;
 
 public class BuildingManager : MonoBehaviour
 {

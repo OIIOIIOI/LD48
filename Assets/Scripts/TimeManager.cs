@@ -22,8 +22,6 @@ public class TimeManager : MonoBehaviour
         else if (instance != this)
             Destroy(gameObject);
         
-        DontDestroyOnLoad(gameObject);
-        
         audioSource = GetComponent<AudioSource>();
         audioSource.loop = true;
     }
