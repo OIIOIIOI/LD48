@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,12 +9,12 @@ public class Building : MonoBehaviour
     public int maxHealthPoints;
     public int currentHealthPoints;
     public BuildingManager.BuildingType buildingType;
-    // Whether or not building is built
-    public bool isBuilt;
     // Whether or not building is selected for fall phase
-    public bool isSelected;
-    
-    
+    public bool isSelected = false;
+    // Icon displayed when action is performed (fall step)
+    public Sprite actionIcon;
+
+
     //When selected over the GameObject, it turns to this color (red)
     private Color _selectedColor = Color.red; // TODO
     //This stores the GameObject’s original color
@@ -22,7 +23,6 @@ public class Building : MonoBehaviour
     //Get the GameObject’s mesh renderer to access the GameObject’s material and color
     private MeshRenderer _renderer;
     
-    private bool _selected = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,26 +30,64 @@ public class Building : MonoBehaviour
         _originalColor = _renderer.material.color;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        // Animate icon during fall && gameManager.phase == fall AND delete outline
+        if (isSelected)
+        {
+            // 
+        }
     }
 
+    // Fall preparation phase: selection of actions
     public void OnMouseDown()
     {
-        // TODO Swtich case according to cycle step phase for enable / disable selection & calculation
-        if (GameManager.GameInstance.actionLeft == 0 && !_selected)
+        // TODO Switch case according to cycle step phase for enable / disable selection & calculation
+        if (GameManager.GameInstance.actionLeft == 0 && !isSelected)
         {
             print("FX ERROR"); // TODO
         }
         else
         {
-            _selected = !_selected;
-            print(_selected ? "FX SELECT" : "FX UNSELECT"); // TODO
-            _renderer.material.color = _selected ? _selectedColor : _originalColor;
-            var operation = _selected ? -1 : 1;
+            isSelected = !isSelected;
+            // Todo display action icon
+            print(isSelected ? "FX SELECT" : "FX UNSELECT"); // TODO
+            _renderer.material.color = isSelected ? _selectedColor : _originalColor;
+            var operation = isSelected ? -1 : 1;
             GameManager.GameInstance.UpdateActionsLeft(operation);
+        }
+    }
+
+    public void PerformFallAction()
+    {
+        if (isSelected)
+        {   // TODO implement function
+            switch (buildingType)
+            {
+                case BuildingManager.BuildingType.Laboratory:
+                    print("execute Analyze relic function");
+                    break;
+                case BuildingManager.BuildingType.ExpeditionCenter:
+                    print("execute Prepare expedition function");
+                    break;
+                case BuildingManager.BuildingType.HarpoonStation:
+                    print("execute harpoon function");
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
+    
+    public void RepairBuilding(int amount) {
+        currentHealthPoints = (currentHealthPoints + amount > maxHealthPoints)? maxHealthPoints : currentHealthPoints + amount;
+    }
+
+    public void ReceiveDamage(int damage) {
+        currentHealthPoints -= damage;
+        
+        if(currentHealthPoints <=0) {
+            gameObject.SetActive(false);
         }
     }
 }

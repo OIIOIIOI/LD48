@@ -169,16 +169,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebb355f83152fc34abea123ab85097f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laboratory: {fileID: 0}
-  harpoonCenter: {fileID: 0}
-  expeditionCenter: {fileID: 0}
-  housesLeft: {fileID: 0}
-  houseRight: {fileID: 0}
+  laboratory: {fileID: 1988218718485645928, guid: b91a8d30c567c5646811dd2d16ba47dd,
+    type: 3}
+  harpoonStation: {fileID: 1988218718485645928, guid: 90cc958df71bfbe43a3b2304c5d2c84d,
+    type: 3}
+  expeditionCenter: {fileID: 1988218718485645928, guid: db72dc28871ac6b448289823babdae92,
+    type: 3}
+  house1: {fileID: 1988218718485645928, guid: b45fc5fdb8ee6c541bfc1cb8ab3b11f1, type: 3}
+  house2: {fileID: 1988218718485645928, guid: 606b8132771ec3c48b888bbc5715e1ec, type: 3}
   left: {fileID: 1067207111}
   right: {fileID: 463672041}
   bottom: {fileID: 2033253542}
   bottomLeft: {fileID: 848066146}
   bottomRight: {fileID: 877408626}
+  inGameBuilding: []
+  targetedBuilding: {fileID: 0}
 --- !u!65 &37972937
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour
     public int materials = 0;
     // knowledge in stock
     public int knowledge = 0;
+    // Damage per it. May increase during the game
+    public int damageHitValue = 1;
 
     // Ratio population / action
     public int actionPopulationRatio = 5; 
