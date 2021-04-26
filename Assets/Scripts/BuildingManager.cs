@@ -15,13 +15,13 @@ public class BuildingManager : MonoBehaviour
         House1,
         House2
     }
-
-    // Building gameObject
-    public GameObject laboratory;
-    public GameObject harpoonStation;
-    public GameObject expeditionCenter;
-    public GameObject house1;
-    public GameObject house2;
+    
+    // Building gameObjectScript
+    public Building laboratory;
+    public Building harpoonStation;
+    public Building expeditionCenter;
+    public Building house1;
+    public Building house2;
     
     // PlaceHolder gameObject
     public GameObject left;
@@ -31,10 +31,10 @@ public class BuildingManager : MonoBehaviour
     public GameObject bottomRight;
 
     // List of built facilities
-    public List<GameObject> inGameBuilding = new List<GameObject>();
+    public List<Building> inGameBuildingScripts = new List<Building>();
     
-    // Targeted building for domage (us Type)
-    public GameObject targetedBuilding;
+    // Targeted building for damage (us Type)
+    public Building targetedBuilding;
     private void Awake()
     {
         if (BuildingManagerInstance == null)
@@ -48,15 +48,15 @@ public class BuildingManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        inGameBuilding.Add(harpoonStation);
+        inGameBuildingScripts.Add(harpoonStation);
     }
     
     /* Fall action functions */
     public void PerformFallActions()
     {
-        foreach (var building in inGameBuilding)
+        foreach (var building in inGameBuildingScripts)
         {
-            building.GetComponent<Building>().PerformFallAction();
+            building.PerformFallAction();
             
         }
     }
@@ -65,7 +65,7 @@ public class BuildingManager : MonoBehaviour
     public void DealDamage(BuildingType type) {
         GetTargetedBuildingObj(type);
         var damage = GameManager.GameInstance.damageHitValue;
-        targetedBuilding.GetComponent<Building>().ReceiveDamage(damage);
+        targetedBuilding.ReceiveDamage(damage);
     }
     
     /* Stase actions functions */
