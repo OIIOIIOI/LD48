@@ -15,7 +15,8 @@ public class CycleManager : MonoBehaviour
     public Text cycleUI;// DEBUG
     
     public enum LoopState { Pause, Fall, Stasis };
-    
+    public enum ActionPhase { PrepareFall, Fall, PrepareStasis, Stasis }
+
     [HideInInspector]
     public LoopState state { get; private set; } = LoopState.Pause;
     [HideInInspector]
@@ -27,14 +28,17 @@ public class CycleManager : MonoBehaviour
             instance = this;
         else if (instance != this)
             Destroy(gameObject);
-        
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        state = LoopState.Fall;
-        TimeManager.instance.StartPhase(state);
+        StartPhase(LoopState.Fall);
+    }
+
+    private void StartPhase(LoopState s)
+    {
+        state = s;
+        TimeManager.instance.StartPhase(s);
     }
 
     public void EndPhase()
@@ -43,14 +47,9 @@ public class CycleManager : MonoBehaviour
             currentCycle++;
 
         if (currentCycle < totalCycles)
-        {
-            state = (state == LoopState.Fall) ? LoopState.Stasis : LoopState.Fall;
-            TimeManager.instance.StartPhase(state);
-        }
+            StartPhase((state == LoopState.Fall) ? LoopState.Stasis : LoopState.Fall);
         else
-        {
             Debug.Log("GAME OVER");
-        }
     }
 
     private void FixedUpdate()
@@ -58,4 +57,5 @@ public class CycleManager : MonoBehaviour
         stateUI.text = state.ToString();
         cycleUI.text = "CYCLE #" + currentCycle + " OF " + (totalCycles - 1);
     }
+    
 }
