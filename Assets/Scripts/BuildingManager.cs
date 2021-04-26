@@ -41,7 +41,8 @@ public class BuildingManager : MonoBehaviour
     public Placeholder bottomRightPlace;
 
     // List of built facilities
-    public List<Building> inGameBuildingScripts = new List<Building>();
+    public List<Building> inGameBuilding = new List<Building>();
+    public List<Placeholder> placeholders = new List<Placeholder>();
     
     // Targeted building for damage (us Type)
     private Building targetedBuilding;
@@ -59,13 +60,19 @@ public class BuildingManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        inGameBuildingScripts.Add(harpoonStation);
+        inGameBuilding.Add(harpoonStation);
+        // Feed palceholder list
+        placeholders.Add(leftPlace);
+        placeholders.Add(rightPlace);
+        placeholders.Add(bottomPlace);
+        placeholders.Add(bottomLeftPlace);
+        placeholders.Add(bottomRightPlace);
     }
     
     /* Fall action functions */
     public void PerformFallActions()
     {
-        foreach (var building in inGameBuildingScripts)
+        foreach (var building in inGameBuilding)
         {
             building.PerformFallAction();
             
@@ -84,13 +91,20 @@ public class BuildingManager : MonoBehaviour
     
     // damage building
     private void DealDamage(BuildingType type) {
-        GetTargetedBuildingObj(type);
+        GetTargetedBuilding(type);
         var damage = GameManager.GameInstance.damageHitValue;
-        targetedBuilding.ReceiveDamage(damage);
+        var isDestroyed = targetedBuilding.ReceiveDamage(damage);
+        // If destroyed remove it from inGameBuilding list and from placeholder
+        if (isDestroyed)
+        {
+            inGameBuilding.Remove(targetedBuilding);
+            placeholders.Find(p => p.buildingType == type).isHosting = false;
+        }
     }
     
     /* Stase actions functions */
     // Build
+    
     // placeholder.hosting = true
     // placeholder.buildingtype
     
@@ -99,9 +113,9 @@ public class BuildingManager : MonoBehaviour
     // launch expedition
     
     
-    /* Building getters */
+    /* Buildings & placeholders getters */
     // Get Building game object
-    private void GetTargetedBuildingObj(BuildingType type) {
+    private void GetTargetedBuilding(BuildingType type) {
         switch (type)
         {
             case BuildingType.HarpoonStation:

@@ -84,11 +84,20 @@ public class Building : MonoBehaviour
         currentHealthPoints = (currentHealthPoints + amount > maxHealthPoints)? maxHealthPoints : currentHealthPoints + amount;
     }
 
-    public void ReceiveDamage(int damage) {
+    public bool ReceiveDamage(int damage) {
         currentHealthPoints -= damage;
-        
-        if(currentHealthPoints <=0) {
-            gameObject.SetActive(false);
-        }
+
+        if (currentHealthPoints > 0)
+            return false;
+        DestroyBuilding();
+        return true;
+    }
+
+    private void DestroyBuilding()
+    {
+        // reset values
+        isSelected = false;
+        currentHealthPoints = maxHealthPoints;
+        gameObject.SetActive(false);
     }
 }
