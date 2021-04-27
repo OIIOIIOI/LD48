@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1988218718485645935}
   - component: {fileID: 1988218718485645923}
   m_Layer: 0
-  m_Name: HarponCenter
+  m_Name: HarpoonStation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,5 +111,5 @@ MonoBehaviour:
   maxHealthPoints: 10
   currentHealthPoints: 10
   buildingType: 1
-  isBuilt: 0
-  isSelected: 0
+  isSelected: 1
+  actionIcon: {fileID: 0}

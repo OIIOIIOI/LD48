@@ -17,25 +17,36 @@ public class BuildingManager : MonoBehaviour
         House2
     }
 
-    // Building gameObject
-    public GameObject laboratory;
-    public GameObject harpoonStation;
-    public GameObject expeditionCenter;
-    public GameObject house1;
-    public GameObject house2;
+    public enum PlaceholderType
+    {
+        Left,
+        Right,
+        Bottom,
+        BottomLeft,
+        BottomRight
+    }
+    
+    // Building gameObjectScript
+    public Building laboratory;
+    public Building harpoonStation;
+    public Building expeditionCenter;
+    public Building house1;
+    public Building house2;
     
     // PlaceHolder gameObject
-    public GameObject left;
-    public GameObject right;
-    public GameObject bottom;
-    public GameObject bottomLeft;
-    public GameObject bottomRight;
+    public Placeholder leftPlace;
+    public Placeholder rightPlace;
+    public Placeholder bottomPlace;
+    public Placeholder bottomLeftPlace;
+    public Placeholder bottomRightPlace;
 
     // List of built facilities
-    public List<GameObject> inGameBuilding = new List<GameObject>();
+    public List<Building> inGameBuilding = new List<Building>();
+    public List<Placeholder> placeholders = new List<Placeholder>();
     
-    // Targeted building for domage (us Type)
-    public GameObject targetedBuilding;
+    // Targeted building for damage (us Type)
+    private Building targetedBuilding;
+    private Placeholder targetedPlaceholder;
     private void Awake()
     {
         if (BuildingManagerInstance == null)
@@ -50,6 +61,12 @@ public class BuildingManager : MonoBehaviour
     private void Start()
     {
         inGameBuilding.Add(harpoonStation);
+        // Feed palceholder list
+        placeholders.Add(leftPlace);
+        placeholders.Add(rightPlace);
+        placeholders.Add(bottomPlace);
+        placeholders.Add(bottomLeftPlace);
+        placeholders.Add(bottomRightPlace);
     }
     
     /* Fall action functions */
@@ -57,29 +74,48 @@ public class BuildingManager : MonoBehaviour
     {
         foreach (var building in inGameBuilding)
         {
-            building.GetComponent<Building>().PerformFallAction();
+            building.PerformFallAction();
             
         }
     }
 
+    // Check if a building is present in placeholder
+    public bool EvaluateImpact(PlaceholderType placeholder)
+    {
+        GetTargetedPlaceholder(placeholder);
+        if (!targetedPlaceholder.isHosting)
+            return false;
+        DealDamage(targetedPlaceholder.buildingType);
+        return true;
+    }
+    
     // damage building
-    public void DealDamage(BuildingType type) {
-        GetTargetedBuildingObj(type);
+    private void DealDamage(BuildingType type) {
+        GetTargetedBuilding(type);
         var damage = GameManager.GameInstance.damageHitValue;
-        targetedBuilding.GetComponent<Building>().ReceiveDamage(damage);
+        var isDestroyed = targetedBuilding.ReceiveDamage(damage);
+        // If destroyed remove it from inGameBuilding list and from placeholder
+        if (isDestroyed)
+        {
+            inGameBuilding.Remove(targetedBuilding);
+            placeholders.Find(p => p.buildingType == type).isHosting = false;
+        }
     }
     
     /* Stase actions functions */
     // Build
+    
+    // placeholder.hosting = true
+    // placeholder.buildingtype
     
     // repair
     
     // launch expedition
     
     
-    /* Building getters */
+    /* Buildings & placeholders getters */
     // Get Building game object
-    private void GetTargetedBuildingObj(BuildingType type) {
+    private void GetTargetedBuilding(BuildingType type) {
         switch (type)
         {
             case BuildingType.HarpoonStation:
@@ -101,5 +137,29 @@ public class BuildingManager : MonoBehaviour
                 targetedBuilding = null;
                 break;
         }
+    }
+    // Get Placeholder game object
+    private void GetTargetedPlaceholder(PlaceholderType type) {
+        switch (type)
+        {
+            case PlaceholderType.Left:
+                targetedPlaceholder = leftPlace;
+                break;
+            case PlaceholderType.Right:
+                targetedPlaceholder = rightPlace;
+                break;
+            case PlaceholderType.Bottom:
+                targetedPlaceholder = bottomPlace;
+                break;
+            case PlaceholderType.BottomLeft:
+                targetedPlaceholder = bottomLeftPlace;
+                break;
+            case PlaceholderType.BottomRight:
+                targetedPlaceholder = bottomRightPlace;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+
     }
 }
