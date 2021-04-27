@@ -59,12 +59,12 @@ TagManager:
   - name: Front
     uniqueID: 2565854489
     locked: 0
-  - name: Icons
-    uniqueID: 1052459267
-    locked: 0
   - name: Debris
     uniqueID: 1789423615
     locked: 0
   - name: Clouds Front
     uniqueID: 2030157413
+    locked: 0
+  - name: Icons
+    uniqueID: 1052459267
     locked: 0
