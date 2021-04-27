@@ -26,27 +26,40 @@ public class BuildingManager : MonoBehaviour
         BottomRight
     }
     
-    // Building gameObjectScript
+    // Building Script
     public Building laboratory;
     public Building harpoonStation;
     public Building expeditionCenter;
     public Building house1;
     public Building house2;
     
-    // PlaceHolder gameObject
+    // Building gameObject (used for Instanciate)
+    public GameObject laboratoryGO;
+    public GameObject harpoonStationGO;
+    public GameObject expeditionCenterGO;
+    public GameObject house1GO;
+    public GameObject house2GO;
+    
+    // PlaceHolder script
     public Placeholder leftPlace;
     public Placeholder rightPlace;
     public Placeholder bottomPlace;
     public Placeholder bottomLeftPlace;
     public Placeholder bottomRightPlace;
 
+    // PlaceHolder gameObject (use for Instanciate)
+    public GameObject leftPlaceGO;
+    public GameObject rightPlaceGO;
+    public GameObject bottomPlaceGO;
+    public GameObject bottomLeftPlaceGO;
+    public GameObject bottomRightPlaceGO;
+
     // List of built facilities
+    [HideInInspector]
     public List<Building> inGameBuilding = new List<Building>();
+    [HideInInspector]
     public List<Placeholder> placeholders = new List<Placeholder>();
-    
-    // Targeted building for damage (us Type)
-    private Building targetedBuilding;
-    private Placeholder targetedPlaceholder;
+
     private void Awake()
     {
         if (BuildingManagerInstance == null)
@@ -60,29 +73,29 @@ public class BuildingManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        inGameBuilding.Add(harpoonStation);
-        // Feed palceholder list
+        // Feed placeholder list and placeholder scripts
         placeholders.Add(leftPlace);
         placeholders.Add(rightPlace);
         placeholders.Add(bottomPlace);
         placeholders.Add(bottomLeftPlace);
         placeholders.Add(bottomRightPlace);
+        Build(BuildingType.HarpoonStation, PlaceholderType.Bottom);
     }
     
     /* Fall action functions */
+    // TODO To call at the end of preparation step (fall cycle)
     public void PerformFallActions()
     {
         foreach (var building in inGameBuilding)
         {
             building.PerformFallAction();
-            
         }
     }
 
     // Check if a building is present in placeholder
     public bool EvaluateImpact(PlaceholderType placeholder)
     {
-        GetTargetedPlaceholder(placeholder);
+        var targetedPlaceholder = GetTargetedPlaceholder(placeholder);
         if (!targetedPlaceholder.isHosting)
             return false;
         DealDamage(targetedPlaceholder.buildingType);
@@ -91,7 +104,7 @@ public class BuildingManager : MonoBehaviour
     
     // damage building
     private void DealDamage(BuildingType type) {
-        GetTargetedBuilding(type);
+        var targetedBuilding = GetTargetedBuilding(type);
         var damage = GameManager.GameInstance.damageHitValue;
         var isDestroyed = targetedBuilding.ReceiveDamage(damage);
         // If destroyed remove it from inGameBuilding list and from placeholder
@@ -104,6 +117,20 @@ public class BuildingManager : MonoBehaviour
     
     /* Stase actions functions */
     // Build
+    public void Build(BuildingType buildingType, PlaceholderType placeholderType)
+    {
+        Vector2 v = new Vector2(0, 0);
+        var buildingScript = GetTargetedBuilding(buildingType);
+        var buildingGO = GetTargetedBuildingGO(buildingType);
+        var placeholderScript = GetTargetedPlaceholder(placeholderType);
+        var placeholderGO = GetTargetedPlaceholderGO(placeholderType);
+        var newBuilding = Instantiate(buildingGO, placeholderGO.transform);
+        // Add building script to inGame list
+        inGameBuilding.Add(buildingScript);
+        // Set Placeholder
+        placeholderScript.isHosting = true;
+        placeholderScript.buildingType = buildingType;
+    }
     
     // placeholder.hosting = true
     // placeholder.buildingtype
@@ -112,51 +139,100 @@ public class BuildingManager : MonoBehaviour
     
     // launch expedition
     
-    
+    // Reset Building selection at each state Todo to call at each phase
+    public void SetUpPhase(ActionPhase phase)
+    {
+        switch (phase)
+            // Todo hide actionSprite
+        {
+            case ActionPhase.PrepareFall:
+                inGameBuilding.ForEach(b =>
+                {
+                    b.isSelected = false;
+                    // b.actionIcon
+                });
+                break;
+            case ActionPhase.Fall:
+                break;
+            case ActionPhase.PrepareStasis:
+                inGameBuilding.ForEach(b => b.isSelected = false);
+                break;
+            case ActionPhase.Stasis:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(phase), phase, null);
+        }
+    }
     /* Buildings & placeholders getters */
-    // Get Building game object
-    private void GetTargetedBuilding(BuildingType type) {
+    // Get Building Script
+    private Building GetTargetedBuilding(BuildingType type) {
         switch (type)
         {
             case BuildingType.HarpoonStation:
-                targetedBuilding = harpoonStation;
-                break;
+                return harpoonStation;
             case BuildingType.ExpeditionCenter:
-                targetedBuilding = expeditionCenter;
-                break;
+                return expeditionCenter;
             case BuildingType.Laboratory:
-                targetedBuilding = laboratory;
-                break;
+                return laboratory;
             case BuildingType.House1:
-                targetedBuilding = house1;
-                break;
+                return house1;
             case BuildingType.House2:
-                targetedBuilding = house2;
-                break;
+                return house2;
             default:
-                targetedBuilding = null;
-                break;
+                return null;
         }
     }
-    // Get Placeholder game object
-    private void GetTargetedPlaceholder(PlaceholderType type) {
+    // Get Placeholder Script
+    private Placeholder GetTargetedPlaceholder(PlaceholderType type) {
         switch (type)
         {
             case PlaceholderType.Left:
-                targetedPlaceholder = leftPlace;
-                break;
+                return leftPlace;
             case PlaceholderType.Right:
-                targetedPlaceholder = rightPlace;
-                break;
+                return rightPlace;
             case PlaceholderType.Bottom:
-                targetedPlaceholder = bottomPlace;
-                break;
+                return bottomPlace;
             case PlaceholderType.BottomLeft:
-                targetedPlaceholder = bottomLeftPlace;
-                break;
+                return bottomLeftPlace;
             case PlaceholderType.BottomRight:
-                targetedPlaceholder = bottomRightPlace;
-                break;
+                return bottomRightPlace;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+
+    }
+    // Get Building GameObject
+    private GameObject GetTargetedBuildingGO(BuildingType type) {
+        switch (type)
+        {
+            case BuildingType.HarpoonStation:
+                return harpoonStationGO;
+            case BuildingType.ExpeditionCenter:
+                return expeditionCenterGO;
+            case BuildingType.Laboratory:
+                return laboratoryGO;
+            case BuildingType.House1:
+                return house1GO;
+            case BuildingType.House2:
+                return house2GO;
+            default:
+                return null;
+        }
+    }
+    // Get Placeholder GameObject
+    private GameObject GetTargetedPlaceholderGO(PlaceholderType type) {
+        switch (type)
+        {
+            case PlaceholderType.Left:
+                return leftPlaceGO;
+            case PlaceholderType.Right:
+                return rightPlaceGO;
+            case PlaceholderType.Bottom:
+                return bottomPlaceGO;
+            case PlaceholderType.BottomLeft:
+                return bottomLeftPlaceGO;
+            case PlaceholderType.BottomRight:
+                return bottomRightPlaceGO;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }

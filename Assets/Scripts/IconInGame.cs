@@ -69,7 +69,7 @@ public class IconInGame : MonoBehaviour
                 _sr.sprite = sprites[10];
                 break;
             default :
-                _sr.sprite = sprites[0];
+                _sr.sprite = null;
                 break;
         }
     }
