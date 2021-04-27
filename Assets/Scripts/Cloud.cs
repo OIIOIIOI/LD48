@@ -25,7 +25,9 @@ public class Cloud : MonoBehaviour
         if (Random.value < 0.5f)
             sr.flipX = true;
         // Random alpha
-        sr.color = Random.ColorHSV(0f, 0f, 0f, 0f, 1f, 1f, 0.65f, 0.95f);
+        Color currentColor = sr.color;
+        currentColor.a = Random.Range(0.65f, 0.95f);
+        sr.color = currentColor;
         // Random layer
         layer = (Random.value < 0.5f) ? CloudLayer.Back : CloudLayer.Front;
 
