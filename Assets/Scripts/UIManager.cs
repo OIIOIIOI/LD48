@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using ActionPhase = CycleManager.ActionPhase;
 using BuildingType = BuildingManager.BuildingType;
+using PlaceholderType = BuildingManager.PlaceholderType;
 
 
 public class UIManager : MonoBehaviour
 {
+    [HideInInspector]
     public UIManager uiManagerInstance;
     // Fall state preparation phase
     public GameObject fallPreparationGroup;
@@ -22,7 +25,7 @@ public class UIManager : MonoBehaviour
     public IconInGame rightWIP;
     
     // Stase state preparation phase
-    
+    // Icon place (3 / placeholder)
     // Stase state exec phase
     
     private void Awake()
@@ -36,20 +39,22 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        stasisPreparationGroup.gameObject.SetActive(false);
-        SetUpPrepareFall();
+        // stasisPreparationGroup.gameObject.SetActive(false); todo to uncomment
+        // SetUpPrepareFall(); // TO do to delete after cycle implementation
+        SetUpPrepareStasis();
+
     }
     public void Update()
     {
         
     }
+    // TODO link pahse with cycleManager
     public void InitPhase(ActionPhase phase)
     {
         switch (phase)
         {
-
             case ActionPhase.PrepareFall:
-                
+                SetUpPrepareFall();
                 break;
             case ActionPhase.Fall:
                 break;
@@ -62,57 +67,74 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetUpPrepareFall()
+    private void SetUpPrepareFall()
     {
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
         {
             if (placeholder.isHosting)
-                if (placeholder.placeholderType == BuildingManager.PlaceholderType.Left)
+            {
+                // Get action icon in building
+                var icon = BuildingManager.BuildingManagerInstance.inGameBuildings.Find(b => b.buildingType == placeholder.buildingType).actionIcon;
+                if (placeholder.placeholderType == PlaceholderType.Left)
                 {
-                    leftActionIcon.iconType = BindActionIcon(placeholder.buildingType);
-                    leftActionIcon.SetType(leftActionIcon.iconType);
+                    leftActionIcon.gameObject.SetActive(true);
+                    leftActionIcon.SetType(icon);
                 }
-                if (placeholder.placeholderType == BuildingManager.PlaceholderType.Bottom)
+                if (placeholder.placeholderType == PlaceholderType.Bottom)
                 {
-                    bottomActionIcon.iconType = BindActionIcon(placeholder.buildingType);
-                    bottomActionIcon.SetType(bottomActionIcon.iconType);
+                    bottomActionIcon.gameObject.SetActive(true);
+                    bottomActionIcon.SetType(icon);
                 }
-                if (placeholder.placeholderType == BuildingManager.PlaceholderType.Right)
+                if (placeholder.placeholderType == PlaceholderType.Right)
                 {
-                    rightActionIcon.iconType = BindActionIcon(placeholder.buildingType);
-                    rightActionIcon.SetType(rightActionIcon.iconType);
+                    rightActionIcon.gameObject.SetActive(true);
+                    rightActionIcon.SetType(icon);
                 }
+            }
         }
     }
 
-    private void SetUpPrepareStasis()
-    {
-        
-    }
-    
     private void SetUpFall()
     {
+        // If placeholder full
         
+        // If building selected 
+        // Pop and Animate Work In Progress Icon
     }
-    
+    private void SetUpPrepareStasis()
+    {
+        foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
+        {
+            /*if (placeholder.placeholderType == PlaceholderType.Left)
+            {
+                leftActionIcon.gameObject.SetActive(true);
+                leftActionIcon.SetType(icon);
+            }
+            if (placeholder.placeholderType == PlaceholderType.Bottom)
+            {
+                bottomActionIcon.gameObject.SetActive(true);
+                bottomActionIcon.SetType(icon);
+            }
+            if (placeholder.placeholderType == PlaceholderType.Right)
+            {
+                rightActionIcon.gameObject.SetActive(true);
+                rightActionIcon.SetType(icon);
+            }
+            if (placeholder.isHosting)
+            {
+                BuildingManager.BuildingManagerInstance.inGameBuildings.Find(b => b.buildingType == BuildingType.Laboratory)
+                    
+            }
+            else
+            {
+                
+            }*/
+        }
+    }
+
     private void SetUpStasis()
     {
         
     }
-
-    private IconInGame.IconType BindActionIcon(BuildingType type)
-    {
-        switch(type)
-        {
-            case BuildingType.Laboratory:
-                return IconInGame.IconType.Analyse;
-            case BuildingType.HarpoonStation:
-                return IconInGame.IconType.Collect;
-            case BuildingType.ExpeditionCenter:
-                return IconInGame.IconType.Expedition;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(type), type, null);
-        }
-    }
-
+    
 }

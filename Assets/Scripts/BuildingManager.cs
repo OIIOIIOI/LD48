@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using ActionPhase = CycleManager.ActionPhase;
 
@@ -55,8 +56,8 @@ public class BuildingManager : MonoBehaviour
     public GameObject bottomRightPlaceGO;
 
     // List of built facilities
-    [HideInInspector]
-    public List<Building> inGameBuilding = new List<Building>();
+    [FormerlySerializedAs("inGameBuilding")] [HideInInspector]
+    public List<Building> inGameBuildings = new List<Building>();
     [HideInInspector]
     public List<Placeholder> placeholders = new List<Placeholder>();
 
@@ -86,7 +87,7 @@ public class BuildingManager : MonoBehaviour
     // TODO To call at the end of preparation step (fall cycle)
     public void PerformFallActions()
     {
-        foreach (var building in inGameBuilding)
+        foreach (var building in inGameBuildings)
         {
             building.PerformFallAction();
         }
@@ -110,7 +111,7 @@ public class BuildingManager : MonoBehaviour
         // If destroyed remove it from inGameBuilding list and from placeholder
         if (isDestroyed)
         {
-            inGameBuilding.Remove(targetedBuilding);
+            inGameBuildings.Remove(targetedBuilding);
             placeholders.Find(p => p.buildingType == type).isHosting = false;
         }
     }
@@ -126,7 +127,7 @@ public class BuildingManager : MonoBehaviour
         var placeholderGO = GetTargetedPlaceholderGO(placeholderType);
         var newBuilding = Instantiate(buildingGO, placeholderGO.transform);
         // Add building script to inGame list
-        inGameBuilding.Add(buildingScript);
+        inGameBuildings.Add(buildingScript);
         // Set Placeholder
         placeholderScript.isHosting = true;
         placeholderScript.buildingType = buildingType;
@@ -146,7 +147,7 @@ public class BuildingManager : MonoBehaviour
             // Todo hide actionSprite
         {
             case ActionPhase.PrepareFall:
-                inGameBuilding.ForEach(b =>
+                inGameBuildings.ForEach(b =>
                 {
                     b.isSelected = false;
                     // b.actionIcon
@@ -155,7 +156,7 @@ public class BuildingManager : MonoBehaviour
             case ActionPhase.Fall:
                 break;
             case ActionPhase.PrepareStasis:
-                inGameBuilding.ForEach(b => b.isSelected = false);
+                inGameBuildings.ForEach(b => b.isSelected = false);
                 break;
             case ActionPhase.Stasis:
                 break;

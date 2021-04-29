@@ -112,4 +112,7 @@ MonoBehaviour:
   currentHealthPoints: 10
   buildingType: 0
   isSelected: 0
-  actionIcon: {fileID: 0}
+  actionIcon: 5
+  build: 6
+  repair: 7
+  expedition: 0

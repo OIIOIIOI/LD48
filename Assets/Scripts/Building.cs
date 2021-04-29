@@ -13,7 +13,14 @@ public class Building : MonoBehaviour
     // Whether or not building is selected for fall phase
     public bool isSelected = false;
     // Icon displayed when action is performed (fall step)
-    public Sprite actionIcon;
+    public IconInGame.IconType actionIcon;
+    // Icon available dureing stasis state
+    [HideInInspector]
+    public IconInGame.IconType build = IconInGame.IconType.Build;
+    [HideInInspector]
+    public IconInGame.IconType repair = IconInGame.IconType.Repair;
+    [HideInInspector]
+    public IconInGame.IconType expedition;
 
 
     //When selected over the GameObject, it turns to this color (red)
@@ -29,6 +36,7 @@ public class Building : MonoBehaviour
     {
         _renderer = GetComponent<MeshRenderer>();
         _originalColor = _renderer.material.color;
+        expedition = buildingType == BuildingType.ExpeditionCenter ? IconInGame.IconType.Expedition : default;
     }
 
     private void Update()
