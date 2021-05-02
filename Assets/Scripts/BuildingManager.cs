@@ -60,7 +60,6 @@ public class BuildingManager : MonoBehaviour
     public List<Building> inGameBuildings = new List<Building>();
     [HideInInspector]
     public List<Placeholder> placeholders = new List<Placeholder>();
-
     private void Awake()
     {
         if (BuildingManagerInstance == null)
@@ -126,20 +125,22 @@ public class BuildingManager : MonoBehaviour
         var placeholderScript = GetTargetedPlaceholder(placeholderType);
         var placeholderGO = GetTargetedPlaceholderGO(placeholderType);
         var newBuilding = Instantiate(buildingGO, placeholderGO.transform);
+
         // Add building script to inGame list
         inGameBuildings.Add(buildingScript);
         // Set Placeholder
         placeholderScript.isHosting = true;
         placeholderScript.buildingType = buildingType;
     }
-    
-    // placeholder.hosting = true
-    // placeholder.buildingtype
-    
+
     // repair
-    
+    public void Repair(BuildingType buildingType)
+    {
+        var amount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
+        inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(amount);
+    }
     // launch expedition
-    
+     
     // Reset Building selection at each state Todo to call at each phase
     public void SetUpPhase(ActionPhase phase)
     {

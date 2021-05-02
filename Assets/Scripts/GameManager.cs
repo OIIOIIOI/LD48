@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour
     
     /** Global UI **/
     // Start fall cycle button
-    public Button startFallButton;
+    [FormerlySerializedAs("startFallButton")] public Button startButton;
     // Text UI for population
     public TextMeshProUGUI populationUI;
     // Text UI for Relic
@@ -38,6 +39,10 @@ public class GameManager : MonoBehaviour
     public int knowledge = 0;
     // Damage per it. May increase during the game
     public int damageHitValue = 1;
+    // Ratio resources / repair point
+    public int repairRatio = 2;
+    // building cost
+    public int buildingCost = 20;
 
     // Ratio population / action
     public int actionPopulationRatio = 5; 
@@ -55,7 +60,7 @@ public class GameManager : MonoBehaviour
         
         /* Disable UI components */
         // Disable the fall launch
-        startFallButton.gameObject.SetActive(false);
+        startButton.gameObject.SetActive(false);
         // Init buttons group
         // fallButtonsGroup.SetActive(false);
         // stasePrepButtonsGroup.SetActive(false);
@@ -112,6 +117,6 @@ public class GameManager : MonoBehaviour
     {
         actionLeft += amount;
         // While actions left, disable start button
-        startFallButton.gameObject.SetActive(actionLeft == 0? true: false);
+        startButton.interactable = actionLeft == 0;
     }
 }

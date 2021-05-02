@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 2703584653976567316}
   - component: {fileID: 6779482852524908754}
   - component: {fileID: 394307825895875315}
-  - component: {fileID: 3265099093901187321}
-  - component: {fileID: 4381536619987416807}
   m_Layer: 5
   m_Name: UIStasisButton
   m_TagString: Untagged
@@ -121,77 +119,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6779482852524908754}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!212 &3265099093901187321
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2551100327441520809}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
---- !u!114 &4381536619987416807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2551100327441520809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b208a9593ef6a9544877dddda278cba5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sprites:
-  - {fileID: 21300000, guid: 4f5c50bc1f50cf444a61fad86707e463, type: 3}
-  - {fileID: 21300000, guid: edcb1f93d6f01e547bfa2746c30dab96, type: 3}
-  - {fileID: 21300000, guid: cb9eaf32f2b62e946abb5c34816a1961, type: 3}
-  - {fileID: 21300000, guid: 10db66b70d7b38a44bd06cadef274a7d, type: 3}
-  - {fileID: 21300000, guid: e5f490bed5f14b746bcde9038f683ad6, type: 3}
-  - {fileID: 21300000, guid: 1910d7d617abe0340ae90fe5c9422d5e, type: 3}
-  - {fileID: 21300000, guid: 0295d6a99497fd64a91d2d1a0ba3f0ec, type: 3}
-  - {fileID: 21300000, guid: d0fe70702f0fe6c448cafa06c5332c04, type: 3}
-  iconType: 0
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using ActionPhase = CycleManager.ActionPhase;
 using BuildingType = BuildingManager.BuildingType;
@@ -20,12 +18,15 @@ public class UIManager : MonoBehaviour
     
     // Fall state exec phase
     public GameObject stasisPreparationGroup;
-    public IconInGame leftWIP;
-    public IconInGame bottomtWIP;
-    public IconInGame rightWIP;
+    // public IconInGame leftWIP;
+    // public IconInGame bottomtWIP;
+    // public IconInGame rightWIP;
     
     // Stase state preparation phase
-    // Icon place (3 / placeholder)
+    public StasisGrpBtn grpBtnLeft;
+    public StasisGrpBtn grpBtnRight;
+    public StasisGrpBtn grpBtnBottom;
+    
     // Stase state exec phase
     
     private void Awake()
@@ -41,14 +42,31 @@ public class UIManager : MonoBehaviour
     {
         // stasisPreparationGroup.gameObject.SetActive(false); todo to uncomment
         // SetUpPrepareFall(); // TO do to delete after cycle implementation
-        SetUpPrepareStasis();
+        // Add event listener on Btn
+        foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
+        {
+            if (placeholder.placeholderType == PlaceholderType.Left)
+            {
+                AddEventListenerStasisBtn(grpBtnLeft, placeholder);
+            }
+            if (placeholder.placeholderType == PlaceholderType.Bottom)
+            {
+                AddEventListenerStasisBtn(grpBtnBottom, placeholder);
+            }
+            if (placeholder.placeholderType == PlaceholderType.Right)
+            {
+                AddEventListenerStasisBtn(grpBtnRight, placeholder);
+            }
+        }
+        UpdatePrepareStasis();
 
     }
     public void Update()
     {
-        
+        // Todo Only during stasis state
+        UpdatePrepareStasis();
     }
-    // TODO link pahse with cycleManager
+    // TODO link phase with cycleManager
     public void InitPhase(ActionPhase phase)
     {
         switch (phase)
@@ -96,45 +114,73 @@ public class UIManager : MonoBehaviour
 
     private void SetUpFall()
     {
-        // If placeholder full
-        
         // If building selected 
         // Pop and Animate Work In Progress Icon
     }
-    private void SetUpPrepareStasis()
+    private void UpdatePrepareStasis()
     {
+        var inGameBuilding = BuildingManager.BuildingManagerInstance.inGameBuildings;
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
         {
-            /*if (placeholder.placeholderType == PlaceholderType.Left)
+            if (placeholder.placeholderType == PlaceholderType.Left)
             {
-                leftActionIcon.gameObject.SetActive(true);
-                leftActionIcon.SetType(icon);
+                UpdateStasisButtons(placeholder, grpBtnLeft, inGameBuilding);
             }
             if (placeholder.placeholderType == PlaceholderType.Bottom)
             {
-                bottomActionIcon.gameObject.SetActive(true);
-                bottomActionIcon.SetType(icon);
+                UpdateStasisButtons(placeholder, grpBtnBottom, inGameBuilding);
             }
             if (placeholder.placeholderType == PlaceholderType.Right)
             {
-                rightActionIcon.gameObject.SetActive(true);
-                rightActionIcon.SetType(icon);
+                UpdateStasisButtons(placeholder, grpBtnRight, inGameBuilding);
             }
-            if (placeholder.isHosting)
-            {
-                BuildingManager.BuildingManagerInstance.inGameBuildings.Find(b => b.buildingType == BuildingType.Laboratory)
-                    
-            }
-            else
-            {
-                
-            }*/
         }
+        // Manage population variation (Action point & houses
+        ManagePopulation();
     }
-
     private void SetUpStasis()
     {
         
     }
     
+    private static void UpdateStasisButtons(Placeholder placeholder, StasisGrpBtn grpBtn, List<Building> inGameBuilding)
+    {
+        if (placeholder.isHosting)
+        {
+            // Deactivate buttons
+            grpBtn.buildXpCenter.gameObject.SetActive(false);
+            grpBtn.buildLab.gameObject.SetActive(false);
+            // Activate buttons
+            grpBtn.repair.gameObject.SetActive(true);
+            if(placeholder.buildingType == BuildingType.ExpeditionCenter)
+                grpBtn.goXp.gameObject.SetActive(true);
+            // Compare life to disable repair & build
+            var building = inGameBuilding.Find(b => b.buildingType == placeholder.buildingType);
+            grpBtn.repair.enabled = building.currentHealthPoints < building.maxHealthPoints;
+
+        }
+        else
+        {
+            // Deactivate buttons
+            grpBtn.repair.gameObject.SetActive(false);
+            grpBtn.goXp.gameObject.SetActive(false);
+            // Set Expedition center building button if not exist
+            grpBtn.buildXpCenter.gameObject.SetActive(!inGameBuilding.Exists(b => b.buildingType == BuildingType.ExpeditionCenter));
+            // Set lab building center button if not exist
+            grpBtn.buildLab.gameObject.SetActive(!inGameBuilding.Exists(b => b.buildingType == BuildingType.Laboratory));
+        }
+    }
+    
+    private static void AddEventListenerStasisBtn(StasisGrpBtn grpBtn, Placeholder placeholder)
+    {
+        grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
+        grpBtn.buildLab.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.Laboratory, placeholder.placeholderType));
+        grpBtn.buildXpCenter.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType));
+    }
+    
+    private void ManagePopulation()
+    {
+        // If population / ratio == && if not built
+        
+    }
 }

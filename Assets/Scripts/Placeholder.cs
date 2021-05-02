@@ -14,6 +14,7 @@ public class Placeholder : MonoBehaviour
     public PlaceholderType placeholderType;
     
     // Type of building
+    [HideInInspector]
     public BuildingType buildingType;
 
     //  Transform position of the placeholder
@@ -21,7 +22,7 @@ public class Placeholder : MonoBehaviour
 
     private void Awake()
     {
-        placeholderPosition = transform.position;
+        placeholderPosition = gameObject.transform.position;
     }
 }
 
