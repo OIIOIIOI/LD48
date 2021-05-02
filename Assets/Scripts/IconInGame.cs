@@ -27,6 +27,8 @@ public class IconInGame : MonoBehaviour
 
     private void Awake()
     {
+        // Disabled by default
+        gameObject.SetActive(false);
         _sr = GetComponent<SpriteRenderer>();
         SetType(iconType);
     }

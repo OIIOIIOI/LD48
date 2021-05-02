@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using ActionPhase = CycleManager.ActionPhase;
 
@@ -55,11 +56,10 @@ public class BuildingManager : MonoBehaviour
     public GameObject bottomRightPlaceGO;
 
     // List of built facilities
-    [HideInInspector]
-    public List<Building> inGameBuilding = new List<Building>();
+    [FormerlySerializedAs("inGameBuilding")] [HideInInspector]
+    public List<Building> inGameBuildings = new List<Building>();
     [HideInInspector]
     public List<Placeholder> placeholders = new List<Placeholder>();
-
     private void Awake()
     {
         if (BuildingManagerInstance == null)
@@ -86,7 +86,7 @@ public class BuildingManager : MonoBehaviour
     // TODO To call at the end of preparation step (fall cycle)
     public void PerformFallActions()
     {
-        foreach (var building in inGameBuilding)
+        foreach (var building in inGameBuildings)
         {
             building.PerformFallAction();
         }
@@ -110,7 +110,7 @@ public class BuildingManager : MonoBehaviour
         // If destroyed remove it from inGameBuilding list and from placeholder
         if (isDestroyed)
         {
-            inGameBuilding.Remove(targetedBuilding);
+            inGameBuildings.Remove(targetedBuilding);
             placeholders.Find(p => p.buildingType == type).isHosting = false;
         }
     }
@@ -125,20 +125,22 @@ public class BuildingManager : MonoBehaviour
         var placeholderScript = GetTargetedPlaceholder(placeholderType);
         var placeholderGO = GetTargetedPlaceholderGO(placeholderType);
         var newBuilding = Instantiate(buildingGO, placeholderGO.transform);
+
         // Add building script to inGame list
-        inGameBuilding.Add(buildingScript);
+        inGameBuildings.Add(buildingScript);
         // Set Placeholder
         placeholderScript.isHosting = true;
         placeholderScript.buildingType = buildingType;
     }
-    
-    // placeholder.hosting = true
-    // placeholder.buildingtype
-    
+
     // repair
-    
+    public void Repair(BuildingType buildingType)
+    {
+        var amount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
+        inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(amount);
+    }
     // launch expedition
-    
+     
     // Reset Building selection at each state Todo to call at each phase
     public void SetUpPhase(ActionPhase phase)
     {
@@ -146,7 +148,7 @@ public class BuildingManager : MonoBehaviour
             // Todo hide actionSprite
         {
             case ActionPhase.PrepareFall:
-                inGameBuilding.ForEach(b =>
+                inGameBuildings.ForEach(b =>
                 {
                     b.isSelected = false;
                     // b.actionIcon
@@ -155,7 +157,7 @@ public class BuildingManager : MonoBehaviour
             case ActionPhase.Fall:
                 break;
             case ActionPhase.PrepareStasis:
-                inGameBuilding.ForEach(b => b.isSelected = false);
+                inGameBuildings.ForEach(b => b.isSelected = false);
                 break;
             case ActionPhase.Stasis:
                 break;
