@@ -88,8 +88,15 @@ public class Building : MonoBehaviour
         }
     }
     
-    public void RepairBuilding(int amount) {
-        currentHealthPoints = (currentHealthPoints + amount > maxHealthPoints)? maxHealthPoints : currentHealthPoints + amount;
+    public int RepairBuilding(int amount) {
+        if (currentHealthPoints + amount > maxHealthPoints)
+        {
+            var rest = currentHealthPoints + amount - maxHealthPoints;
+            currentHealthPoints = maxHealthPoints;
+            return rest;
+        }
+        currentHealthPoints += amount;
+        return 0;
     }
 
     public bool ReceiveDamage(int damage) {

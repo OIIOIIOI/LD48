@@ -136,8 +136,9 @@ public class BuildingManager : MonoBehaviour
     // repair
     public void Repair(BuildingType buildingType)
     {
-        var amount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
-        inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(amount);
+        var maxAmount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
+        var rest = inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(maxAmount);
+        GameManager.GameInstance.materials -= (maxAmount - rest) * GameManager.GameInstance.repairRatio;
     }
     // launch expedition
      

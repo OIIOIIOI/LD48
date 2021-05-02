@@ -3218,9 +3218,11 @@ MonoBehaviour:
   population: 5
   actionLeft: 0
   relics: 0
-  materials: 0
+  materials: 500
   knowledge: 0
   damageHitValue: 1
+  repairRatio: 2
+  buildingCost: 20
   actionPopulationRatio: 5
 --- !u!1 &1289078200
 GameObject:
