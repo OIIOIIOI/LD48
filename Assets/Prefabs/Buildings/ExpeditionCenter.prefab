@@ -114,9 +114,7 @@ MonoBehaviour:
   buildingType: 2
   isSelected: 0
   actionIcon: 8
-  build: 6
-  repair: 7
-  expedition: 0
+  tooltip: {fileID: -5360303411011895969}
 --- !u!114 &-5360303411011895969
 MonoBehaviour:
   m_ObjectHideFlags: 0

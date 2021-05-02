@@ -125,7 +125,6 @@ public class BuildingManager : MonoBehaviour
         var placeholderScript = GetTargetedPlaceholder(placeholderType);
         var placeholderGO = GetTargetedPlaceholderGO(placeholderType);
         var newBuilding = Instantiate(buildingGO, placeholderGO.transform);
-
         // Add building script to inGame list
         inGameBuildings.Add(buildingScript);
         // Set Placeholder

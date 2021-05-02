@@ -176,6 +176,7 @@ public class UIManager : MonoBehaviour
         grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
         grpBtn.buildLab.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.Laboratory, placeholder.placeholderType));
         grpBtn.buildXpCenter.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType));
+        // grpBtn.goXp.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType)); // call function in event manager
     }
     
     private void ManagePopulation()
