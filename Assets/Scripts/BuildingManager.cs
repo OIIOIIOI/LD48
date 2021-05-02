@@ -110,9 +110,20 @@ public class BuildingManager : MonoBehaviour
         // If destroyed remove it from inGameBuilding list and from placeholder
         if (isDestroyed)
         {
-            inGameBuildings.Remove(targetedBuilding);
-            placeholders.Find(p => p.buildingType == type).isHosting = false;
+            DestroyBuilding(type);
         }
+    }
+    
+    // Destroy Building
+    public void DestroyBuilding(BuildingType buildingType)
+    {
+        // Remove from building script list
+        var destroyedBuilding = GetTargetedBuilding(buildingType);
+        inGameBuildings.Remove(destroyedBuilding);
+        // Set placeholder as empty
+        placeholders.Find(p => p.buildingType == buildingType).isHosting = false;
+        // Destroy GameObject
+        Destroy(destroyedBuilding.gameObject);
     }
     
     /* Stase actions functions */
@@ -124,7 +135,7 @@ public class BuildingManager : MonoBehaviour
         var buildingGO = GetTargetedBuildingGO(buildingType);
         var placeholderScript = GetTargetedPlaceholder(placeholderType);
         var placeholderGO = GetTargetedPlaceholderGO(placeholderType);
-        var newBuilding = Instantiate(buildingGO, placeholderGO.transform);
+        Instantiate(buildingGO, placeholderGO.transform);
         // Add building script to inGame list
         inGameBuildings.Add(buildingScript);
         // Set Placeholder

@@ -124,6 +124,13 @@ public class Building : MonoBehaviour
             case BuildingType.HarpoonStation:
                 tooltip.message = "To do: Harpoon Station description \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
                 break;
+            case BuildingType.House1:
+                tooltip.message = "Houses \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
+
+                break;
+            case BuildingType.House2:
+                tooltip.message = "Houses \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
