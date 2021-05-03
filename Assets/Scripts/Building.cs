@@ -96,19 +96,7 @@ public class Building : MonoBehaviour
 
     public bool ReceiveDamage(int damage) {
         currentHealthPoints -= damage;
-
-        if (currentHealthPoints > 0)
-            return false;
-        DestroyBuilding();
-        return true;
-    }
-
-    private void DestroyBuilding()
-    {
-        // reset values
-        isSelected = false;
-        currentHealthPoints = maxHealthPoints;
-        gameObject.SetActive(false);
+        return currentHealthPoints <= 0;
     }
 
     private void SetTooltipMessage()
@@ -126,7 +114,6 @@ public class Building : MonoBehaviour
                 break;
             case BuildingType.House1:
                 tooltip.message = "Houses \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
-
                 break;
             case BuildingType.House2:
                 tooltip.message = "Houses \n  HP " + currentHealthPoints + "/" + maxHealthPoints;

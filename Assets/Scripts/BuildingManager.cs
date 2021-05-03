@@ -117,6 +117,11 @@ public class BuildingManager : MonoBehaviour
     // Destroy Building
     public void DestroyBuilding(BuildingType buildingType)
     {
+        // Adjust population
+        if (buildingType == BuildingType.House1 || buildingType == BuildingType.House2)
+        {
+            GameManager.GameInstance.population -= GameManager.GameInstance.actionPopulationRatio;
+        }
         // Remove from building script list
         var destroyedBuilding = GetTargetedBuilding(buildingType);
         inGameBuildings.Remove(destroyedBuilding);
@@ -162,7 +167,6 @@ public class BuildingManager : MonoBehaviour
                 inGameBuildings.ForEach(b =>
                 {
                     b.isSelected = false;
-                    // b.actionIcon
                 });
                 break;
             case ActionPhase.Fall:
