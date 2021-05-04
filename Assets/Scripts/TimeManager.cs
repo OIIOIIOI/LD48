@@ -34,7 +34,7 @@ public class TimeManager : MonoBehaviour
         switch (phase)
         {
             case ActionPhase.Fall:
-                phaseDuration = 10f;
+                phaseDuration = 20f;
                 break;
             case ActionPhase.PrepareStasis:
                 phaseDuration = 5f;

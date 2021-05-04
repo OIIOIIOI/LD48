@@ -20,8 +20,8 @@ public class QTEScript : MonoBehaviour
     public SpriteMask smallCircleMask;
 
     private KeyCode key;
-    private float neutralTime = 2f;
-    private float reactionTime = .5f;
+    private float neutralTime = 1.2f;
+    private float reactionTime = .8f;
     private float elapsedTime;
     private bool ready;
 
@@ -48,7 +48,6 @@ public class QTEScript : MonoBehaviour
 
         SetupGraphics();
         
-        keyText.text = key.ToString();
         success = false;
         elapsedTime = 0f;
         ready = true;
@@ -56,6 +55,8 @@ public class QTEScript : MonoBehaviour
 
     private void SetupGraphics()
     {
+        keyText.text = key.ToString();
+        
         minScale = smallCircleMask.transform.localScale.x;
         maxScale = largeCircle.transform.localScale.x;
 
@@ -79,13 +80,21 @@ public class QTEScript : MonoBehaviour
         
         // Conditions checks
         if (Input.GetKeyDown(key))
-        {
-            if (elapsedTime > neutralTime && elapsedTime <= neutralTime + reactionTime)
-                Success();
-            else
-                Fail();
-        }
+            CheckForSuccess();
         else if (elapsedTime > neutralTime + reactionTime)
+            Fail();
+    }
+
+    private void OnMouseDown()
+    {
+        CheckForSuccess();
+    }
+
+    private void CheckForSuccess()
+    {
+        if (elapsedTime > neutralTime && elapsedTime <= neutralTime + reactionTime)
+            Success();
+        else
             Fail();
     }
 
