@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     // Ratio population / action
     public int actionPopulationRatio = 5; 
     // Number of actions available
-    private int _actionAvailable = 1;
+    public int actionAvailable = 1;
     
     // Static instance of GM
     public static GameManager GameInstance;
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Set actions to dispatch
-        actionLeft = _actionAvailable;
+        actionLeft = actionAvailable;
         
         /* Disable UI components */
         // Disable the fall launch
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour
     // Update number of actions according to population
     private void UpdateActionsNumber()
     {
-        _actionAvailable = population % actionPopulationRatio;
+        actionAvailable = population % actionPopulationRatio;
     }
 
     public void UpdateActionsLeft(int amount)

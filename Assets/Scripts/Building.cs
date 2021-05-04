@@ -14,13 +14,7 @@ public class Building : MonoBehaviour
     public bool isSelected = false;
     // Icon displayed when action is performed (fall step)
     public IconInGame.IconType actionIcon;
-    // Icon available dureing stasis state
-    [HideInInspector]
-    public IconInGame.IconType build = IconInGame.IconType.Build;
-    [HideInInspector]
-    public IconInGame.IconType repair = IconInGame.IconType.Repair;
-    [HideInInspector]
-    public IconInGame.IconType expedition;
+    public Tooltip tooltip;
 
 
     //When selected over the GameObject, it turns to this color (red)
@@ -36,7 +30,6 @@ public class Building : MonoBehaviour
     {
         _renderer = GetComponent<MeshRenderer>();
         _originalColor = _renderer.material.color;
-        expedition = buildingType == BuildingType.ExpeditionCenter ? IconInGame.IconType.Expedition : default;
     }
 
     private void Update()
@@ -44,8 +37,10 @@ public class Building : MonoBehaviour
         // Animate icon during fall && gameManager.phase == fall AND delete outline
         if (isSelected)
         {
-            // 
+            //
         }
+        // Update HP in building tooltip
+        SetTooltipMessage();
     }
 
     // Fall preparation phase: selection of actions
@@ -88,24 +83,43 @@ public class Building : MonoBehaviour
         }
     }
     
-    public void RepairBuilding(int amount) {
-        currentHealthPoints = (currentHealthPoints + amount > maxHealthPoints)? maxHealthPoints : currentHealthPoints + amount;
+    public int RepairBuilding(int amount) {
+        if (currentHealthPoints + amount > maxHealthPoints)
+        {
+            var rest = currentHealthPoints + amount - maxHealthPoints;
+            currentHealthPoints = maxHealthPoints;
+            return rest;
+        }
+        currentHealthPoints += amount;
+        return 0;
     }
 
     public bool ReceiveDamage(int damage) {
         currentHealthPoints -= damage;
-
-        if (currentHealthPoints > 0)
-            return false;
-        DestroyBuilding();
-        return true;
+        return currentHealthPoints <= 0;
     }
 
-    private void DestroyBuilding()
+    private void SetTooltipMessage()
     {
-        // reset values
-        isSelected = false;
-        currentHealthPoints = maxHealthPoints;
-        gameObject.SetActive(false);
+        switch (buildingType)
+        {
+            case BuildingType.Laboratory:
+                tooltip.message = "To do: Laboratory description \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
+                break;
+            case BuildingType.ExpeditionCenter:
+                tooltip.message = "To do: Expedition Center description \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
+                break;
+            case BuildingType.HarpoonStation:
+                tooltip.message = "To do: Harpoon Station description \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
+                break;
+            case BuildingType.House1:
+                tooltip.message = "Houses \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
+                break;
+            case BuildingType.House2:
+                tooltip.message = "Houses \n  HP " + currentHealthPoints + "/" + maxHealthPoints;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 }

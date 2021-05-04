@@ -173,6 +173,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6541632487977028564, guid: 228164974223d4248a24833fcc0546b9,
+        type: 3}
+      propertyPath: message
+      value: 'Repair building (cost: 2 resources/ HP, 1AP). All resources available
+        will be consume.'
+      objectReference: {fileID: 0}
     - target: {fileID: 6779482852524908754, guid: 228164974223d4248a24833fcc0546b9,
         type: 3}
       propertyPath: m_Type
@@ -321,6 +327,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541632487977028564, guid: 228164974223d4248a24833fcc0546b9,
+        type: 3}
+      propertyPath: message
+      value: 'Build Laboratory. Cost: 20 resources, 1AP.'
       objectReference: {fileID: 0}
     - target: {fileID: 6779482852524908754, guid: 228164974223d4248a24833fcc0546b9,
         type: 3}
@@ -471,6 +482,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6541632487977028564, guid: 228164974223d4248a24833fcc0546b9,
+        type: 3}
+      propertyPath: message
+      value: Go to expedition. Cost 1AP.
+      objectReference: {fileID: 0}
     - target: {fileID: 6779482852524908754, guid: 228164974223d4248a24833fcc0546b9,
         type: 3}
       propertyPath: m_Type
@@ -618,6 +634,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6541632487977028564, guid: 228164974223d4248a24833fcc0546b9,
+        type: 3}
+      propertyPath: message
+      value: 'Build Expedition Center. Cost: 20 resources, 1AP.'
       objectReference: {fileID: 0}
     - target: {fileID: 6779482852524908754, guid: 228164974223d4248a24833fcc0546b9,
         type: 3}

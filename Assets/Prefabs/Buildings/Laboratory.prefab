@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1988218718485645934}
   - component: {fileID: 1988218718485645935}
   - component: {fileID: 1988218718485645923}
+  - component: {fileID: -5484116316007834741}
   m_Layer: 0
   m_Name: Laboratory
   m_TagString: Untagged
@@ -113,6 +114,17 @@ MonoBehaviour:
   buildingType: 0
   isSelected: 0
   actionIcon: 5
-  build: 6
-  repair: 7
-  expedition: 0
+  tooltip: {fileID: -5484116316007834741}
+--- !u!114 &-5484116316007834741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988218718485645928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ff5088e42f5264daf9ba930f7901b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  message: 'Todo: lab description'

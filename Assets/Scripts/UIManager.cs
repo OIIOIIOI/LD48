@@ -26,6 +26,8 @@ public class UIManager : MonoBehaviour
     public StasisGrpBtn grpBtnLeft;
     public StasisGrpBtn grpBtnRight;
     public StasisGrpBtn grpBtnBottom;
+    public StasisGrpBtn grpBtnBottomLeft;
+    public StasisGrpBtn grpBtnBottomRight;
     
     // Stase state exec phase
     
@@ -45,20 +47,28 @@ public class UIManager : MonoBehaviour
         // Add event listener on Btn
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
         {
-            if (placeholder.placeholderType == PlaceholderType.Left)
+            switch (placeholder.placeholderType)
             {
-                AddEventListenerStasisBtn(grpBtnLeft, placeholder);
-            }
-            if (placeholder.placeholderType == PlaceholderType.Bottom)
-            {
-                AddEventListenerStasisBtn(grpBtnBottom, placeholder);
-            }
-            if (placeholder.placeholderType == PlaceholderType.Right)
-            {
-                AddEventListenerStasisBtn(grpBtnRight, placeholder);
+                case PlaceholderType.Left:
+                    AddEventListenerStasisBtn(grpBtnLeft, placeholder);
+                    break;
+                case PlaceholderType.Bottom:
+                    AddEventListenerStasisBtn(grpBtnBottom, placeholder);
+                    break;
+                case PlaceholderType.Right:
+                    AddEventListenerStasisBtn(grpBtnRight, placeholder);
+                    break;
+                case PlaceholderType.BottomLeft:
+                    AddEventListenerStasisBtn(grpBtnBottomLeft, placeholder);
+                    break;
+                case PlaceholderType.BottomRight:
+                    AddEventListenerStasisBtn(grpBtnBottomRight, placeholder);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
-        UpdatePrepareStasis();
+        InitStasisPrep();
 
     }
     public void Update()
@@ -87,6 +97,9 @@ public class UIManager : MonoBehaviour
 
     private void SetUpPrepareFall()
     {
+        // Adjust actions number
+        UpdateActionsAvailable();
+        // Display action icons
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
         {
             if (placeholder.isHosting)
@@ -116,27 +129,43 @@ public class UIManager : MonoBehaviour
     {
         // If building selected 
         // Pop and Animate Work In Progress Icon
+        
+    }
+
+    private void InitStasisPrep()
+    {
+        // Update actions availables
+        UpdateActionsAvailable();
+        UpdatePrepareStasis();
     }
     private void UpdatePrepareStasis()
     {
         var inGameBuilding = BuildingManager.BuildingManagerInstance.inGameBuildings;
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
         {
-            if (placeholder.placeholderType == PlaceholderType.Left)
+            switch (placeholder.placeholderType)
             {
-                UpdateStasisButtons(placeholder, grpBtnLeft, inGameBuilding);
-            }
-            if (placeholder.placeholderType == PlaceholderType.Bottom)
-            {
-                UpdateStasisButtons(placeholder, grpBtnBottom, inGameBuilding);
-            }
-            if (placeholder.placeholderType == PlaceholderType.Right)
-            {
-                UpdateStasisButtons(placeholder, grpBtnRight, inGameBuilding);
+                case PlaceholderType.Left:
+                    UpdateStasisButtons(placeholder, grpBtnLeft, inGameBuilding);
+                    break;
+                case PlaceholderType.Bottom:
+                    UpdateStasisButtons(placeholder, grpBtnBottom, inGameBuilding);
+                    break;
+                case PlaceholderType.Right:
+                    UpdateStasisButtons(placeholder, grpBtnRight, inGameBuilding);
+                    break;
+                case PlaceholderType.BottomLeft:
+                    UpdateStasisButtons(placeholder, grpBtnBottomLeft, inGameBuilding);
+                    break;
+                case PlaceholderType.BottomRight:
+                    UpdateStasisButtons(placeholder, grpBtnBottomRight, inGameBuilding);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
-        // Manage population variation (Action point & houses
-        ManagePopulation();
+        // Manage population variation (build houses, Action point are managed in the beginning of fall state)
+        ManageHouse();
     }
     private void SetUpStasis()
     {
@@ -164,23 +193,56 @@ public class UIManager : MonoBehaviour
             // Deactivate buttons
             grpBtn.repair.gameObject.SetActive(false);
             grpBtn.goXp.gameObject.SetActive(false);
-            // Set Expedition center building button if not exist
-            grpBtn.buildXpCenter.gameObject.SetActive(!inGameBuilding.Exists(b => b.buildingType == BuildingType.ExpeditionCenter));
-            // Set lab building center button if not exist
-            grpBtn.buildLab.gameObject.SetActive(!inGameBuilding.Exists(b => b.buildingType == BuildingType.Laboratory));
+            // Show build action only on right placeholder
+            if (placeholder.placeholderType != PlaceholderType.BottomLeft && placeholder.placeholderType != PlaceholderType.BottomRight)
+            {
+                // Set Expedition center building button if not exist
+                grpBtn.buildXpCenter.gameObject.SetActive(!inGameBuilding.Exists(b => b.buildingType == BuildingType.ExpeditionCenter));
+                // Set lab building center button if not exist
+                grpBtn.buildLab.gameObject.SetActive(!inGameBuilding.Exists(b => b.buildingType == BuildingType.Laboratory));
+            } else
+            {
+                grpBtn.buildXpCenter.gameObject.SetActive(false);
+                grpBtn.buildLab.gameObject.SetActive(false);
+            }
         }
     }
     
     private static void AddEventListenerStasisBtn(StasisGrpBtn grpBtn, Placeholder placeholder)
     {
-        grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
-        grpBtn.buildLab.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.Laboratory, placeholder.placeholderType));
-        grpBtn.buildXpCenter.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType));
+        // Repair button only for houses
+        if (placeholder.placeholderType == PlaceholderType.BottomLeft || placeholder.placeholderType == PlaceholderType.BottomLeft)
+        {
+            grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
+        }
+        else
+        {
+            grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
+            grpBtn.buildLab.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.Laboratory, placeholder.placeholderType));
+            grpBtn.buildXpCenter.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType));
+            // grpBtn.goXp.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType)); // call function in event manager
+
+        }
     }
     
-    private void ManagePopulation()
+    private void ManageHouse()
     {
-        // If population / ratio == && if not built
-        
+        var placeholders = BuildingManager.BuildingManagerInstance.placeholders;
+        // If population / ratio && if not built
+        if (GameManager.GameInstance.population / GameManager.GameInstance.actionPopulationRatio >= 2 && !placeholders.Find(p => p.placeholderType == PlaceholderType.BottomRight).isHosting)
+            BuildingManager.BuildingManagerInstance.Build(BuildingType.House1, PlaceholderType.BottomRight);
+        if (GameManager.GameInstance.population / GameManager.GameInstance.actionPopulationRatio >= 3 && !placeholders.Find(p => p.placeholderType == PlaceholderType.BottomLeft).isHosting)
+            BuildingManager.BuildingManagerInstance.Build(BuildingType.House2, PlaceholderType.BottomLeft);
+        // if population lost
+        if (GameManager.GameInstance.population / GameManager.GameInstance.actionPopulationRatio < 2 && placeholders.Find(p => p.placeholderType == PlaceholderType.BottomRight).isHosting)
+            BuildingManager.BuildingManagerInstance.DestroyBuilding(BuildingType.House1);
+        if (GameManager.GameInstance.population / GameManager.GameInstance.actionPopulationRatio < 3 && placeholders.Find(p => p.placeholderType == PlaceholderType.BottomLeft).isHosting)
+            BuildingManager.BuildingManagerInstance.DestroyBuilding(BuildingType.House2);
+
+    }
+
+    private void UpdateActionsAvailable()
+    {
+        GameManager.GameInstance.actionAvailable = GameManager.GameInstance.population / GameManager.GameInstance.actionPopulationRatio;
     }
 }

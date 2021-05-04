@@ -110,9 +110,25 @@ public class BuildingManager : MonoBehaviour
         // If destroyed remove it from inGameBuilding list and from placeholder
         if (isDestroyed)
         {
-            inGameBuildings.Remove(targetedBuilding);
-            placeholders.Find(p => p.buildingType == type).isHosting = false;
+            DestroyBuilding(type);
         }
+    }
+    
+    // Destroy Building
+    public void DestroyBuilding(BuildingType buildingType)
+    {
+        // Adjust population
+        if (buildingType == BuildingType.House1 || buildingType == BuildingType.House2)
+        {
+            GameManager.GameInstance.population -= GameManager.GameInstance.actionPopulationRatio;
+        }
+        // Remove from building script list
+        var destroyedBuilding = GetTargetedBuilding(buildingType);
+        inGameBuildings.Remove(destroyedBuilding);
+        // Set placeholder as empty
+        placeholders.Find(p => p.buildingType == buildingType).isHosting = false;
+        // Destroy GameObject
+        Destroy(destroyedBuilding.gameObject);
     }
     
     /* Stase actions functions */
@@ -124,8 +140,7 @@ public class BuildingManager : MonoBehaviour
         var buildingGO = GetTargetedBuildingGO(buildingType);
         var placeholderScript = GetTargetedPlaceholder(placeholderType);
         var placeholderGO = GetTargetedPlaceholderGO(placeholderType);
-        var newBuilding = Instantiate(buildingGO, placeholderGO.transform);
-
+        Instantiate(buildingGO, placeholderGO.transform);
         // Add building script to inGame list
         inGameBuildings.Add(buildingScript);
         // Set Placeholder
@@ -136,8 +151,9 @@ public class BuildingManager : MonoBehaviour
     // repair
     public void Repair(BuildingType buildingType)
     {
-        var amount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
-        inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(amount);
+        var maxAmount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
+        var rest = inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(maxAmount);
+        GameManager.GameInstance.materials -= (maxAmount - rest) * GameManager.GameInstance.repairRatio;
     }
     // launch expedition
      
@@ -151,7 +167,6 @@ public class BuildingManager : MonoBehaviour
                 inGameBuildings.ForEach(b =>
                 {
                     b.isSelected = false;
-                    // b.actionIcon
                 });
                 break;
             case ActionPhase.Fall:
