@@ -56,7 +56,7 @@ public class BuildingManager : MonoBehaviour
     public GameObject bottomRightPlaceGO;
 
     // List of built facilities
-    [FormerlySerializedAs("inGameBuilding")] [HideInInspector]
+    [HideInInspector]
     public List<Building> inGameBuildings = new List<Building>();
     [HideInInspector]
     public List<Placeholder> placeholders = new List<Placeholder>();
@@ -92,7 +92,7 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    // Check if a building is present in placeholder
+    // Check if a building is present in placeholder todo link with hit impact
     public bool EvaluateImpact(PlaceholderType placeholder)
     {
         var targetedPlaceholder = GetTargetedPlaceholder(placeholder);

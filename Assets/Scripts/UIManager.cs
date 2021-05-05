@@ -42,8 +42,6 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        // stasisPreparationGroup.gameObject.SetActive(false); todo to uncomment
-        // SetUpPrepareFall(); // TO do to delete after cycle implementation
         // Add event listener on Btn
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
         {
@@ -68,21 +66,23 @@ public class UIManager : MonoBehaviour
                     throw new ArgumentOutOfRangeException();
             }
         }
-        InitStasisPrep();
+        // stasisPreparationGroup.gameObject.SetActive(false); todo to uncomment
+        // SetUpFallPrep(); // Todo to delete after cycle implementation
+        InitStasisPrep(); // Todo to delete after cycle implementation
 
     }
     public void Update()
     {
         // Todo Only during stasis state
-        UpdatePrepareStasis();
+        UpdateStasis();
     }
-    // TODO link phase with cycleManager
+    // TODO delete or link phase with cycleManager
     public void InitPhase(ActionPhase phase)
     {
         switch (phase)
         {
             case ActionPhase.PrepareFall:
-                SetUpPrepareFall();
+                SetUpFallPrep();
                 break;
             case ActionPhase.Fall:
                 break;
@@ -95,7 +95,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void SetUpPrepareFall()
+    private void SetUpFallPrep()
     {
         // Adjust actions number
         UpdateActionsAvailable();
@@ -127,18 +127,20 @@ public class UIManager : MonoBehaviour
 
     private void SetUpFall()
     {
-        // If building selected 
+        // If building selected
         // Pop and Animate Work In Progress Icon
         
     }
 
     private void InitStasisPrep()
     {
+        // Unselect buildings todo in cycle manager?
+        BuildingManager.BuildingManagerInstance.inGameBuildings.ForEach(b => b.isSelected = false);
         // Update actions availables
         UpdateActionsAvailable();
-        UpdatePrepareStasis();
+        UpdateStasis();
     }
-    private void UpdatePrepareStasis()
+    private void UpdateStasis()
     {
         var inGameBuilding = BuildingManager.BuildingManagerInstance.inGameBuildings;
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
@@ -207,7 +209,7 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-    
+    // TODO if timer, stack click and trigger function at the end of timer. (if as it is, repair perform at last)
     private static void AddEventListenerStasisBtn(StasisGrpBtn grpBtn, Placeholder placeholder)
     {
         // Repair button only for houses
