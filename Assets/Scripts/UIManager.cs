@@ -66,19 +66,23 @@ public class UIManager : MonoBehaviour
                     throw new ArgumentOutOfRangeException();
             }
         }
-        // stasisPreparationGroup.gameObject.SetActive(false); todo to uncomment
+        // stasisPreparationGroup.gameObject.SetActive(false); // Todo to uncomment
+        // SetUpFallPrep(); // Todo to delete when CycleManager is working
     }
     public void Update()
     {
         // Update only during stasis preparation phase
-        while (CycleManager.instance.phase == ActionPhase.PrepareStasis)
+        /*while (CycleManager.instance.phase == ActionPhase.PrepareStasis)
         {
             UpdateStasisPrep();
-        }
+        }*/
+        // UpdateStasisPrep(); // Todo to delete and uncomment top when CycleManager is working
     }
 
     public void SetUpFallPrep()
     {
+        // Activate PrepFallGroup UI
+        fallPreparationGroup.gameObject.SetActive(true);
         // Adjust actions number
         UpdateActionsAvailable();
         // Display action icons
@@ -107,8 +111,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void SetUpFall()
+    public void SetUpFall()
     {
+        // Deactivate PrepFallGroup UI
+        fallPreparationGroup.gameObject.SetActive(false);
+        
         // If building selected
         // Pop and Animate Work In Progress Icon
         
@@ -149,7 +156,7 @@ public class UIManager : MonoBehaviour
         // Manage population variation (build houses, Action point are managed in the beginning of fall state)
         ManageHouse();
     }
-    private void SetUpStasis()
+    public void SetUpStasis()
     {
         
     }
@@ -189,7 +196,6 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-    // TODO if timer, stack click and trigger function at the end of timer. (if as it is, repair perform at last)
     private static void AddEventListenerStasisBtn(StasisGrpBtn grpBtn, Placeholder placeholder)
     {
         // Repair button only for houses

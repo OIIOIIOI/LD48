@@ -115,6 +115,8 @@ public class CycleManager : MonoBehaviour
     }
     private void StartPhaseFall()
     {
+        // Init UI for this phase
+        UIManager.uiManagerInstance.SetUpFall();
         if (true)
             QTEManager.instance.Activate(QTEType.Debris, 4f);
         if (false)
@@ -135,7 +137,8 @@ public class CycleManager : MonoBehaviour
     
     private void StartPhaseStasis()
     {
-        
+        // Init UI for this phase todo to delete if not used
+        UIManager.uiManagerInstance.SetUpStasis();
     }
     
     private void EndPhaseFall()
