@@ -15,6 +15,8 @@ public class Building : MonoBehaviour
     // Icon displayed when action is performed (fall step)
     public IconInGame.IconType actionIcon;
     public Tooltip tooltip;
+    // save last HP number (await stasis actions finalization)
+    private int oldHP;
 
 
     //When selected over the GameObject, it turns to this color (red)

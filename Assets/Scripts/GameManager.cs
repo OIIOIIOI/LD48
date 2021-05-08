@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,7 +15,7 @@ public class GameManager : MonoBehaviour
     
     /** Global UI **/
     // Start fall cycle button
-    [FormerlySerializedAs("startFallButton")] public Button startButton;
+    public Button startButton;
     // Text UI for population
     public TextMeshProUGUI populationUI;
     // Text UI for Relic
@@ -35,6 +34,9 @@ public class GameManager : MonoBehaviour
     public int relics = 0;
     // Materials in stock
     public int materials = 0;
+    // save last material number (await stasis actions finalization)
+    [HideInInspector]
+    public int oldMaterials;
     // knowledge in stock
     public int knowledge = 0;
     // Damage per it. May increase during the game
@@ -119,4 +121,12 @@ public class GameManager : MonoBehaviour
         // While actions left, disable start button
         startButton.interactable = actionLeft == 0;
     }
+    
+    // While selecting actions are stacked here
+    public void StackStasisActions()
+    {
+        
+    }
+    
+
 }

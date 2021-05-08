@@ -9,7 +9,7 @@ using PlaceholderType = BuildingManager.PlaceholderType;
 public class UIManager : MonoBehaviour
 {
     [HideInInspector]
-    public UIManager uiManagerInstance;
+    public static UIManager uiManagerInstance;
     // Fall state preparation phase
     public GameObject fallPreparationGroup;
     public IconInGame leftActionIcon;
@@ -67,35 +67,17 @@ public class UIManager : MonoBehaviour
             }
         }
         // stasisPreparationGroup.gameObject.SetActive(false); todo to uncomment
-        // SetUpFallPrep(); // Todo to delete after cycle implementation
-        InitStasisPrep(); // Todo to delete after cycle implementation
-
     }
     public void Update()
     {
-        // Todo Only during stasis state
-        UpdateStasis();
-    }
-    // TODO delete or link phase with cycleManager
-    public void InitPhase(ActionPhase phase)
-    {
-        switch (phase)
+        // Update only during stasis preparation phase
+        while (CycleManager.instance.phase == ActionPhase.PrepareStasis)
         {
-            case ActionPhase.PrepareFall:
-                SetUpFallPrep();
-                break;
-            case ActionPhase.Fall:
-                break;
-            case ActionPhase.PrepareStasis:
-                break;
-            case ActionPhase.Stasis:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(phase), phase, null);
+            UpdateStasisPrep();
         }
     }
 
-    private void SetUpFallPrep()
+    public void SetUpFallPrep()
     {
         // Adjust actions number
         UpdateActionsAvailable();
@@ -132,15 +114,13 @@ public class UIManager : MonoBehaviour
         
     }
 
-    private void InitStasisPrep()
+    public void SetUpStasisPrep()
     {
-        // Unselect buildings todo in cycle manager?
-        BuildingManager.BuildingManagerInstance.inGameBuildings.ForEach(b => b.isSelected = false);
-        // Update actions availables
+        // Update actions available
         UpdateActionsAvailable();
-        UpdateStasis();
+        UpdateStasisPrep();
     }
-    private void UpdateStasis()
+    private void UpdateStasisPrep()
     {
         var inGameBuilding = BuildingManager.BuildingManagerInstance.inGameBuildings;
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
@@ -215,14 +195,19 @@ public class UIManager : MonoBehaviour
         // Repair button only for houses
         if (placeholder.placeholderType == PlaceholderType.BottomLeft || placeholder.placeholderType == PlaceholderType.BottomLeft)
         {
+            // grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
             grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
         }
         else
         {
-            grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
-            grpBtn.buildLab.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.Laboratory, placeholder.placeholderType));
-            grpBtn.buildXpCenter.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType));
+            // grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
+            // grpBtn.buildLab.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.Laboratory, placeholder.placeholderType));
+            // grpBtn.buildXpCenter.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType));
+            grpBtn.repair.onClick.AddListener(() => GameManager.GameInstance.StackStasisActions());
+            grpBtn.buildLab.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions());
+            grpBtn.buildXpCenter.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions());
             // grpBtn.goXp.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType)); // call function in event manager
+            // grpBtn.goXp.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions()); // call function in event manager
 
         }
     }

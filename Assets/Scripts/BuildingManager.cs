@@ -26,6 +26,15 @@ public class BuildingManager : MonoBehaviour
         BottomLeft,
         BottomRight
     }
+
+    // type used for stacking prepared actions
+    public enum StasisActionsType
+    {
+        GoXp,
+        Repair,
+        BuildLab,
+        BuildXp
+    }
     
     // Building Script
     public Building laboratory;
