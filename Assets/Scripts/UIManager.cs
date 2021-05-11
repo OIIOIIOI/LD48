@@ -202,13 +202,18 @@ public class UIManager : MonoBehaviour
         if (placeholder.placeholderType == PlaceholderType.BottomLeft || placeholder.placeholderType == PlaceholderType.BottomLeft)
         {
             grpBtn.repair.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.Repair));
+            grpBtn.repair.onClick.AddListener(() =>grpBtn.repair.GetComponent<StasisBtn>().Click());
         }
         else
         {
             grpBtn.repair.onClick.AddListener(() => GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.Repair));
+            grpBtn.repair.onClick.AddListener(() =>grpBtn.repair.GetComponent<StasisBtn>().Click());
             grpBtn.buildLab.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.BuildLab));
+            grpBtn.buildLab.onClick.AddListener(() =>grpBtn.buildLab.GetComponent<StasisBtn>().Click());
             grpBtn.buildXpCenter.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.BuildXp));
+            grpBtn.buildXpCenter.onClick.AddListener(() =>grpBtn.buildXpCenter.GetComponent<StasisBtn>().Click());
             grpBtn.goXp.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.GoXp)); 
+            grpBtn.goXp.onClick.AddListener(() =>grpBtn.goXp.GetComponent<StasisBtn>().Click());
 
         }
     }
