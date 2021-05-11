@@ -129,8 +129,6 @@ public class CycleManager : MonoBehaviour
     {
         // Unselect buildings
         BuildingManager.BuildingManagerInstance.inGameBuildings.ForEach(b => b.isSelected = false);
-        // Stock materials value
-        GameManager.GameInstance.oldMaterials = GameManager.GameInstance.materials;
         // Init UI for this phase
         UIManager.uiManagerInstance.SetUpStasisPrep();
     }
@@ -147,7 +145,6 @@ public class CycleManager : MonoBehaviour
     }
 
     // UPDATES
-
     private void Update()
     {
         

@@ -3366,7 +3366,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6207a9bd39d3caf4fb5d3b736a0b780e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiManagerInstance: {fileID: 0}
   fallPreparationGroup: {fileID: 888219033}
   leftActionIcon: {fileID: 2096461064}
   bottomActionIcon: {fileID: 1082184405}
@@ -3698,6 +3697,7 @@ MonoBehaviour:
   actionLeft: 0
   relics: 0
   materials: 500
+  oldMaterials: 0
   knowledge: 0
   damageHitValue: 1
   repairRatio: 2

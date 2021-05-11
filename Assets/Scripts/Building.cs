@@ -15,8 +15,6 @@ public class Building : MonoBehaviour
     // Icon displayed when action is performed (fall step)
     public IconInGame.IconType actionIcon;
     public Tooltip tooltip;
-    // save last HP number (await stasis actions finalization)
-    private int oldHP;
 
 
     //When selected over the GameObject, it turns to this color (red)
@@ -85,15 +83,9 @@ public class Building : MonoBehaviour
         }
     }
     
-    public int RepairBuilding(int amount) {
-        if (currentHealthPoints + amount > maxHealthPoints)
-        {
-            var rest = currentHealthPoints + amount - maxHealthPoints;
-            currentHealthPoints = maxHealthPoints;
-            return rest;
-        }
+    public void RepairBuilding(int amount)
+    {
         currentHealthPoints += amount;
-        return 0;
     }
 
     public bool ReceiveDamage(int damage) {
@@ -123,5 +115,11 @@ public class Building : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    // Calculate materials left after hp recovery
+    public int CalculateMaterialsLeft(int maxHpAmount)
+    {
+        return (currentHealthPoints + maxHpAmount > maxHealthPoints) ? currentHealthPoints + maxHpAmount - maxHealthPoints : 0;
     }
 }

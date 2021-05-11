@@ -201,19 +201,14 @@ public class UIManager : MonoBehaviour
         // Repair button only for houses
         if (placeholder.placeholderType == PlaceholderType.BottomLeft || placeholder.placeholderType == PlaceholderType.BottomLeft)
         {
-            // grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
-            grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
+            grpBtn.repair.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.Repair));
         }
         else
         {
-            // grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
-            // grpBtn.buildLab.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.Laboratory, placeholder.placeholderType));
-            // grpBtn.buildXpCenter.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType));
-            grpBtn.repair.onClick.AddListener(() => GameManager.GameInstance.StackStasisActions());
-            grpBtn.buildLab.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions());
-            grpBtn.buildXpCenter.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions());
-            // grpBtn.goXp.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType)); // call function in event manager
-            // grpBtn.goXp.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions()); // call function in event manager
+            grpBtn.repair.onClick.AddListener(() => GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.Repair));
+            grpBtn.buildLab.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.BuildLab));
+            grpBtn.buildXpCenter.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.BuildXp));
+            grpBtn.goXp.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.GoXp)); 
 
         }
     }

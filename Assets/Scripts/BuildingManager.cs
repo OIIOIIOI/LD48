@@ -158,11 +158,16 @@ public class BuildingManager : MonoBehaviour
     }
 
     // repair
-    public void Repair(BuildingType buildingType)
+    public void Repair(BuildingType buildingType, int Hp)
     {
-        var maxAmount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
-        var rest = inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(maxAmount);
-        GameManager.GameInstance.materials -= (maxAmount - rest) * GameManager.GameInstance.repairRatio;
+        // var maxAmount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
+        // var rest = inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(maxAmount);
+        inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(Hp);
+        // GameManager.GameInstance.materials -= (maxAmount - rest) * GameManager.GameInstance.repairRatio;
+    }
+    public int SelectRepairAction(int maxHpAmount, BuildingType buildingType)
+    {
+        return inGameBuildings.Find(b => b.buildingType == buildingType).CalculateMaterialsLeft(maxHpAmount);
     }
     // launch expedition
      
