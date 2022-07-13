@@ -26,6 +26,15 @@ public class BuildingManager : MonoBehaviour
         BottomLeft,
         BottomRight
     }
+
+    // type used for stacking prepared actions
+    public enum StasisActionsType
+    {
+        GoXp,
+        Repair,
+        BuildLab,
+        BuildXp
+    }
     
     // Building Script
     public Building laboratory;
@@ -56,7 +65,7 @@ public class BuildingManager : MonoBehaviour
     public GameObject bottomRightPlaceGO;
 
     // List of built facilities
-    [FormerlySerializedAs("inGameBuilding")] [HideInInspector]
+    [HideInInspector]
     public List<Building> inGameBuildings = new List<Building>();
     [HideInInspector]
     public List<Placeholder> placeholders = new List<Placeholder>();
@@ -92,7 +101,7 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    // Check if a building is present in placeholder
+    // Check if a building is present in placeholder todo link with hit impact
     public bool EvaluateImpact(PlaceholderType placeholder)
     {
         var targetedPlaceholder = GetTargetedPlaceholder(placeholder);
@@ -149,11 +158,13 @@ public class BuildingManager : MonoBehaviour
     }
 
     // repair
-    public void Repair(BuildingType buildingType)
+    public void Repair(BuildingType buildingType, int Hp)
     {
-        var maxAmount = (int)Mathf.Floor(GameManager.GameInstance.materials / GameManager.GameInstance.repairRatio);
-        var rest = inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(maxAmount);
-        GameManager.GameInstance.materials -= (maxAmount - rest) * GameManager.GameInstance.repairRatio;
+        inGameBuildings.Find(b => b.buildingType == buildingType).RepairBuilding(Hp);
+    }
+    public int SelectRepairAction(int maxHpAmount, BuildingType buildingType)
+    {
+        return inGameBuildings.Find(b => b.buildingType == buildingType).CalculateMaterialsLeft(maxHpAmount);
     }
     // launch expedition
      

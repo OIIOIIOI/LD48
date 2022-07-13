@@ -9,7 +9,7 @@ using PlaceholderType = BuildingManager.PlaceholderType;
 public class UIManager : MonoBehaviour
 {
     [HideInInspector]
-    public UIManager uiManagerInstance;
+    public static UIManager uiManagerInstance;
     // Fall state preparation phase
     public GameObject fallPreparationGroup;
     public IconInGame leftActionIcon;
@@ -42,8 +42,6 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        // stasisPreparationGroup.gameObject.SetActive(false); todo to uncomment
-        // SetUpPrepareFall(); // TO do to delete after cycle implementation
         // Add event listener on Btn
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
         {
@@ -68,35 +66,23 @@ public class UIManager : MonoBehaviour
                     throw new ArgumentOutOfRangeException();
             }
         }
-        InitStasisPrep();
-
+        // stasisPreparationGroup.gameObject.SetActive(false); // Todo to uncomment
+        // SetUpFallPrep(); // Todo to delete when CycleManager is working
     }
     public void Update()
     {
-        // Todo Only during stasis state
-        UpdatePrepareStasis();
-    }
-    // TODO link phase with cycleManager
-    public void InitPhase(ActionPhase phase)
-    {
-        switch (phase)
+        // Update only during stasis preparation phase
+        /*while (CycleManager.instance.phase == ActionPhase.PrepareStasis)
         {
-            case ActionPhase.PrepareFall:
-                SetUpPrepareFall();
-                break;
-            case ActionPhase.Fall:
-                break;
-            case ActionPhase.PrepareStasis:
-                break;
-            case ActionPhase.Stasis:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(phase), phase, null);
-        }
+            UpdateStasisPrep();
+        }*/
+        // UpdateStasisPrep(); // Todo to delete and uncomment top when CycleManager is working
     }
 
-    private void SetUpPrepareFall()
+    public void SetUpFallPrep()
     {
+        // Activate PrepFallGroup UI
+        fallPreparationGroup.gameObject.SetActive(true);
         // Adjust actions number
         UpdateActionsAvailable();
         // Display action icons
@@ -125,20 +111,23 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void SetUpFall()
+    public void SetUpFall()
     {
-        // If building selected 
+        // Deactivate PrepFallGroup UI
+        fallPreparationGroup.gameObject.SetActive(false);
+        
+        // If building selected
         // Pop and Animate Work In Progress Icon
         
     }
 
-    private void InitStasisPrep()
+    public void SetUpStasisPrep()
     {
-        // Update actions availables
+        // Update actions available
         UpdateActionsAvailable();
-        UpdatePrepareStasis();
+        UpdateStasisPrep();
     }
-    private void UpdatePrepareStasis()
+    private void UpdateStasisPrep()
     {
         var inGameBuilding = BuildingManager.BuildingManagerInstance.inGameBuildings;
         foreach (var placeholder in BuildingManager.BuildingManagerInstance.placeholders)
@@ -167,7 +156,7 @@ public class UIManager : MonoBehaviour
         // Manage population variation (build houses, Action point are managed in the beginning of fall state)
         ManageHouse();
     }
-    private void SetUpStasis()
+    public void SetUpStasis()
     {
         
     }
@@ -207,20 +196,24 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-    
     private static void AddEventListenerStasisBtn(StasisGrpBtn grpBtn, Placeholder placeholder)
     {
         // Repair button only for houses
         if (placeholder.placeholderType == PlaceholderType.BottomLeft || placeholder.placeholderType == PlaceholderType.BottomLeft)
         {
-            grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
+            grpBtn.repair.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.Repair));
+            grpBtn.repair.onClick.AddListener(() =>grpBtn.repair.GetComponent<StasisBtn>().Click());
         }
         else
         {
-            grpBtn.repair.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Repair(placeholder.buildingType));
-            grpBtn.buildLab.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.Laboratory, placeholder.placeholderType));
-            grpBtn.buildXpCenter.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType));
-            // grpBtn.goXp.onClick.AddListener(() =>BuildingManager.BuildingManagerInstance.Build(BuildingType.ExpeditionCenter, placeholder.placeholderType)); // call function in event manager
+            grpBtn.repair.onClick.AddListener(() => GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.Repair));
+            grpBtn.repair.onClick.AddListener(() =>grpBtn.repair.GetComponent<StasisBtn>().Click());
+            grpBtn.buildLab.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.BuildLab));
+            grpBtn.buildLab.onClick.AddListener(() =>grpBtn.buildLab.GetComponent<StasisBtn>().Click());
+            grpBtn.buildXpCenter.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.BuildXp));
+            grpBtn.buildXpCenter.onClick.AddListener(() =>grpBtn.buildXpCenter.GetComponent<StasisBtn>().Click());
+            grpBtn.goXp.onClick.AddListener(() =>GameManager.GameInstance.StackStasisActions(placeholder, BuildingManager.StasisActionsType.GoXp)); 
+            grpBtn.goXp.onClick.AddListener(() =>grpBtn.goXp.GetComponent<StasisBtn>().Click());
 
         }
     }

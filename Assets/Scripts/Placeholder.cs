@@ -9,6 +9,8 @@ public class Placeholder : MonoBehaviour
 {
     // Whether or not a building is in this placeholder
     public bool isHosting;
+    [HideInInspector]
+    public bool isSelected = false;
 
     // Type of PlaceHolder
     public PlaceholderType placeholderType;

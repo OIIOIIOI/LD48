@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Serialization;
+using StasisActionsType = BuildingManager.StasisActionsType;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     
     /** Global UI **/
     // Start fall cycle button
-    [FormerlySerializedAs("startFallButton")] public Button startButton;
+    public Button startButton;
     // Text UI for population
     public TextMeshProUGUI populationUI;
     // Text UI for Relic
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     // Text UI for Relic
     public TextMeshProUGUI materialsUI;
     // Text UI for Relic
-    // public Text knowledgeUI;
+    // public Text knowledgeUI; // todo uncomment
     
     /** Game Variable **/
     // Population
@@ -51,6 +51,23 @@ public class GameManager : MonoBehaviour
     
     // Static instance of GM
     public static GameManager GameInstance;
+    // Stacked action of prep stasis phase
+    [HideInInspector]
+    public class StackedAction
+    {
+        public Placeholder placeholder { get; set; }
+        public StasisActionsType actionType { get; set; }
+        public int cost { get; set; }
+
+        public StackedAction(Placeholder placeholder, StasisActionsType actionType, int cost)
+        {
+            this.placeholder = placeholder;
+            this.actionType = actionType;
+            this.cost = cost;
+        }
+    }
+    // Stacked actions list
+    private List<StackedAction> StackedActions = new List<StackedAction>();
 
     // Start is called before the first frame update
     private void Start()
@@ -118,5 +135,68 @@ public class GameManager : MonoBehaviour
         actionLeft += amount;
         // While actions left, disable start button
         startButton.interactable = actionLeft == 0;
+    }
+    
+    // While selecting in stasis prep phase, actions are stacked here
+    public void StackStasisActions(Placeholder placeholder, StasisActionsType action)
+    {
+        placeholder.isSelected = !placeholder.isSelected;
+        // Apply action cost
+        if (placeholder.isSelected)
+        {
+            switch (action)
+            {
+                case StasisActionsType.GoXp:
+                    StackedActions.Add(new StackedAction(placeholder, action, 0));
+                    break;
+                case StasisActionsType.Repair:
+                    // Calcul cost for repairing building (max hp with all material
+                    var maxHpAmount = (int)Mathf.Floor(materials / repairRatio);
+                    var rest = BuildingManager.BuildingManagerInstance.SelectRepairAction(maxHpAmount, placeholder.buildingType);
+                    var cost = (maxHpAmount - rest) * repairRatio;
+                    materials -= cost;
+                    StackedActions.Add(new StackedAction(placeholder, action, cost));
+                    break;
+                case StasisActionsType.BuildLab:
+                    materials -= buildingCost;
+                    StackedActions.Add(new StackedAction(placeholder, action, buildingCost));
+                    break;
+                case StasisActionsType.BuildXp:
+                    StackedActions.Add(new StackedAction(placeholder, action, buildingCost));
+                    break;
+            }
+        }
+        // Cancel action cost
+        else
+        {
+            var sa = StackedActions.Find(stackedAction => stackedAction.placeholder == placeholder);
+            materials += sa.cost;
+            StackedActions.Remove(sa);
+        }
+    }
+    // Execute actions selected during prep stasis phase // Todo call this function when stasis prep phase is over
+    public void performAction()
+    {
+        var bm = BuildingManager.BuildingManagerInstance;
+        StackedActions.ForEach(a =>
+        {
+            switch (a.actionType)
+            {
+
+                case StasisActionsType.GoXp:
+                    // Todo call function in event manager
+                    break;
+                case StasisActionsType.Repair:
+                    var hp = a.cost / repairRatio;
+                    bm.Repair(a.placeholder.buildingType, hp);
+                    break;
+                case StasisActionsType.BuildLab:
+                    bm.Build(a.placeholder.buildingType, a.placeholder.placeholderType);
+                    break;
+                case StasisActionsType.BuildXp:
+                    bm.Build(a.placeholder.buildingType, a.placeholder.placeholderType);
+                    break;
+            }
+        });
     }
 }

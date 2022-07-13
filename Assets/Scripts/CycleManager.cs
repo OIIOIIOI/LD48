@@ -52,8 +52,17 @@ public class CycleManager : MonoBehaviour
         // Start the current phase
         switch (phase)
         {
+            case ActionPhase.PrepareFall:
+                StartPhasePrepFall();
+                break;
             case ActionPhase.Fall:
                 StartPhaseFall();
+                break;
+            case ActionPhase.PrepareStasis:
+                StartPhasePrepStasis();
+                break;
+            case ActionPhase.Stasis:
+                StartPhaseStasis();
                 break;
         }
     }
@@ -97,9 +106,17 @@ public class CycleManager : MonoBehaviour
     }
 
     // SPECIFIC PHASE BEHAVIOURS
-    
+    private void StartPhasePrepFall()
+    {
+        // Unselect buildings
+        BuildingManager.BuildingManagerInstance.inGameBuildings.ForEach(b => b.isSelected = false);
+        // Init UI for this phase
+        UIManager.uiManagerInstance.SetUpFallPrep();
+    }
     private void StartPhaseFall()
     {
+        // Init UI for this phase
+        UIManager.uiManagerInstance.SetUpFall();
         if (true)
             QTEManager.instance.Activate(QTEType.Debris, 4f);
         if (false)
@@ -107,14 +124,27 @@ public class CycleManager : MonoBehaviour
         if (false)
             QTEManager.instance.Activate(QTEType.Research, 2.5f);
     }
+
+    private void StartPhasePrepStasis()
+    {
+        // Unselect buildings
+        BuildingManager.BuildingManagerInstance.inGameBuildings.ForEach(b => b.isSelected = false);
+        // Init UI for this phase
+        UIManager.uiManagerInstance.SetUpStasisPrep();
+    }
+    
+    private void StartPhaseStasis()
+    {
+        // Init UI for this phase todo to delete if not used
+        UIManager.uiManagerInstance.SetUpStasis();
+    }
     
     private void EndPhaseFall()
     {
         QTEManager.instance.DeactivateAll();
     }
-    
-    // UPDATES
 
+    // UPDATES
     private void Update()
     {
         
