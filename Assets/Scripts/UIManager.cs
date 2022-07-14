@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
     // public IconInGame bottomtWIP;
     // public IconInGame rightWIP;
     
-    // Stase state preparation phase
+    // stase state phase // todo Only repair
     public StasisGrpBtn grpBtnLeft;
     public StasisGrpBtn grpBtnRight;
     public StasisGrpBtn grpBtnBottom;
@@ -78,7 +78,8 @@ public class UIManager : MonoBehaviour
         }*/
         // UpdateStasisPrep(); // Todo to delete and uncomment top when CycleManager is working
     }
-
+    
+// todo Show shader + pop icon on selected building, adjust action points
     public void SetUpFallPrep()
     {
         // Activate PrepFallGroup UI
@@ -113,7 +114,7 @@ public class UIManager : MonoBehaviour
 
     public void SetUpFall()
     {
-        // Deactivate PrepFallGroup UI
+        // Desactivate PrepFallGroup UI (shader)
         fallPreparationGroup.gameObject.SetActive(false);
         
         // If building selected
@@ -218,6 +219,7 @@ public class UIManager : MonoBehaviour
         }
     }
     
+    // todo to rework
     private void ManageHouse()
     {
         var placeholders = BuildingManager.BuildingManagerInstance.placeholders;
@@ -236,6 +238,6 @@ public class UIManager : MonoBehaviour
 
     private void UpdateActionsAvailable()
     {
-        GameManager.GameInstance.actionAvailable = GameManager.GameInstance.population / GameManager.GameInstance.actionPopulationRatio;
+        GameManager.GameInstance.actionAvailable = GameManager.GameInstance.population;
     }
 }

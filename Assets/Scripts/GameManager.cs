@@ -10,13 +10,11 @@ public class GameManager : MonoBehaviour
 {
     /** GameObject UI **/
     // Fall preparation buttons group
-    public GameObject fallButtonsGroup;
+    public GameObject fallButtonsGroup; // Life bar + population icon / building
     // Stase preparation buttons group
-    public GameObject stasePrepButtonsGroup;
+    public GameObject staseButtonsGroup; // Repair button / building
     
     /** Global UI **/
-    // Start fall cycle button
-    public Button startButton;
     // Text UI for population
     public TextMeshProUGUI populationUI;
     // Text UI for Relic
@@ -24,11 +22,11 @@ public class GameManager : MonoBehaviour
     // Text UI for Relic
     public TextMeshProUGUI materialsUI;
     // Text UI for Relic
-    // public Text knowledgeUI; // todo uncomment
+    public Text knowledgeUI;
     
     /** Game Variable **/
     // Population
-    public int population = 5;
+    public int population = 1; //todo calculate population (house destroyed malus)
     // Number of action left
     public int actionLeft;
     // Relics in stock
@@ -41,17 +39,14 @@ public class GameManager : MonoBehaviour
     public int damageHitValue = 1;
     // Ratio resources / repair point
     public int repairRatio = 2;
-    // building cost
-    public int buildingCost = 20;
-
-    // Ratio population / action
-    public int actionPopulationRatio = 5; 
+    
     // Number of actions available
-    public int actionAvailable = 1;
+    [HideInInspector]
+    public int actionAvailable;
     
     // Static instance of GM
     public static GameManager GameInstance;
-    // Stacked action of prep stasis phase
+    // Stacked action of prep fall phase
     [HideInInspector]
     public class StackedAction
     {
@@ -76,11 +71,9 @@ public class GameManager : MonoBehaviour
         actionLeft = actionAvailable;
         
         /* Disable UI components */
-        // Disable the fall launch
-        startButton.gameObject.SetActive(false);
         // Init buttons group
         // fallButtonsGroup.SetActive(false);
-        // stasePrepButtonsGroup.SetActive(false);
+        // staseButtonsGroup.SetActive(false);
     }
     
     // Update is called once per frame
@@ -127,17 +120,15 @@ public class GameManager : MonoBehaviour
     // Update number of actions according to population
     private void UpdateActionsNumber()
     {
-        actionAvailable = population % actionPopulationRatio;
+        actionAvailable = population;
     }
 
     public void UpdateActionsLeft(int amount)
     {
         actionLeft += amount;
-        // While actions left, disable start button
-        startButton.interactable = actionLeft == 0;
     }
     
-    // While selecting in stasis prep phase, actions are stacked here
+    // While selecting in stasis phase, actions are stacked here todo rework
     public void StackStasisActions(Placeholder placeholder, StasisActionsType action)
     {
         placeholder.isSelected = !placeholder.isSelected;
@@ -157,13 +148,6 @@ public class GameManager : MonoBehaviour
                     materials -= cost;
                     StackedActions.Add(new StackedAction(placeholder, action, cost));
                     break;
-                case StasisActionsType.BuildLab:
-                    materials -= buildingCost;
-                    StackedActions.Add(new StackedAction(placeholder, action, buildingCost));
-                    break;
-                case StasisActionsType.BuildXp:
-                    StackedActions.Add(new StackedAction(placeholder, action, buildingCost));
-                    break;
             }
         }
         // Cancel action cost
@@ -174,7 +158,7 @@ public class GameManager : MonoBehaviour
             StackedActions.Remove(sa);
         }
     }
-    // Execute actions selected during prep stasis phase // Todo call this function when stasis prep phase is over
+    // Execute actions selected during prep falling phase // Todo call this function when falling phase is over
     public void performAction()
     {
         var bm = BuildingManager.BuildingManagerInstance;
@@ -190,13 +174,12 @@ public class GameManager : MonoBehaviour
                     var hp = a.cost / repairRatio;
                     bm.Repair(a.placeholder.buildingType, hp);
                     break;
-                case StasisActionsType.BuildLab:
-                    bm.Build(a.placeholder.buildingType, a.placeholder.placeholderType);
-                    break;
-                case StasisActionsType.BuildXp:
-                    bm.Build(a.placeholder.buildingType, a.placeholder.placeholderType);
-                    break;
             }
         });
+    }
+
+    public void adjustPopulation()
+    {
+        // todo adjust population according to number of houses
     }
 }

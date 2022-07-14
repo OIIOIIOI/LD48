@@ -49,7 +49,7 @@ public static class ExpeditionEventDealer
 [Serializable]
 public class ExpeditionEvent
 {
-    public enum EventType { Loot, Meet };
+    public enum EventType { Loot, Meet, Fight };
     public enum RewardType { People, Scraps, Relic };
 
     public string type;

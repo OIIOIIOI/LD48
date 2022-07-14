@@ -4,14 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using BuildingType = BuildingManager.BuildingType;
+using ActionType = BuildingManager.BuildingActionsType;
 
 public class Building : MonoBehaviour
 {
     public int maxHealthPoints;
     public int currentHealthPoints;
     public BuildingType buildingType;
+    [HideInInspector]
+    public ActionType actionType;
     // Whether or not building is selected for fall phase
     public bool isSelected = false;
+    // Whether or not building is disabled (destroyed)
+    public bool isDestroyed = false;
     // Icon displayed when action is performed (fall step)
     public IconInGame.IconType actionIcon;
     public Tooltip tooltip;
@@ -28,6 +33,7 @@ public class Building : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetAction();
         _renderer = GetComponent<MeshRenderer>();
         _originalColor = _renderer.material.color;
     }
@@ -39,6 +45,11 @@ public class Building : MonoBehaviour
         {
             //
         }
+        // Renderer destroyed
+        if (isDestroyed)
+        {
+            //
+        }
         // Update HP in building tooltip
         SetTooltipMessage();
     }
@@ -47,7 +58,7 @@ public class Building : MonoBehaviour
     public void OnMouseDown()
     {
         // TODO Switch case according to cycle step phase for enable / disable selection & calculation
-        if (GameManager.GameInstance.actionLeft == 0 && !isSelected)
+        if ((GameManager.GameInstance.actionLeft == 0 && !isSelected)|| isDestroyed)
         {
             print("FX ERROR"); // TODO
         }
@@ -58,39 +69,45 @@ public class Building : MonoBehaviour
             print(isSelected ? "FX SELECT" : "FX UNSELECT"); // TODO
             _renderer.material.color = isSelected ? _selectedColor : _originalColor;
             var operation = isSelected ? -1 : 1;
-            GameManager.GameInstance.UpdateActionsLeft(operation);
+            GameManager.GameInstance.UpdateActionsLeft(operation);//todo do event
         }
     }
 
-    public void PerformFallAction()
+    // Set action according to building type
+    private void SetAction()
     {
-        if (isSelected)
-        {   // TODO implement function
-            switch (buildingType)
-            {
-                case BuildingType.Laboratory:
-                    print("execute Analyze relic function");
-                    break;
-                case BuildingType.ExpeditionCenter:
-                    print("execute Prepare expedition function");
-                    break;
-                case BuildingType.HarpoonStation:
-                    print("execute harpoon function");
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+        actionType = buildingType switch
+        {
+            BuildingType.Laboratory => ActionType.Research,
+            BuildingType.ExpeditionCenter => ActionType.GoXp,
+            BuildingType.HarpoonStation => ActionType.Harpoon,
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
     
+    // damage building
+    public void GetDamage() {
+        var damage = GameManager.GameInstance.damageHitValue;
+        currentHealthPoints -= damage;
+        if (currentHealthPoints <= 0)
+        {
+            isDestroyed = true;
+            currentHealthPoints = 0;
+        }
+    }
+
     public void RepairBuilding(int amount)
     {
         currentHealthPoints += amount;
+        if (currentHealthPoints > 0)
+            isDestroyed = false;
     }
-
-    public bool ReceiveDamage(int damage) {
-        currentHealthPoints -= damage;
-        return currentHealthPoints <= 0;
+    
+    //TOdo manage repair reserve
+    // Calculate materials left after hp recovery
+    public int CalculateMaterialsLeft(int maxHpAmount)
+    {
+        return (currentHealthPoints + maxHpAmount > maxHealthPoints) ? currentHealthPoints + maxHpAmount - maxHealthPoints : 0;
     }
 
     private void SetTooltipMessage()
@@ -115,11 +132,5 @@ public class Building : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
-    }
-
-    // Calculate materials left after hp recovery
-    public int CalculateMaterialsLeft(int maxHpAmount)
-    {
-        return (currentHealthPoints + maxHpAmount > maxHealthPoints) ? currentHealthPoints + maxHpAmount - maxHealthPoints : 0;
     }
 }
